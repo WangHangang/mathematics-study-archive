@@ -33,3 +33,5 @@
   const buttons=[...document.querySelectorAll('[data-lang]')];
   buttons.forEach(button=>button.addEventListener('click',()=>{const lang=button.dataset.lang;document.documentElement.lang=lang==='zh'?'zh-CN':'en';buttons.forEach(x=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-zh]').forEach(x=>x.textContent=x.dataset[lang]);}));
 </script></body></html>
+
+<!-- Pages deployment refresh -->
