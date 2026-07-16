@@ -1,0 +1,989 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Noto Sans SC}[
+  Path=fonts/package/,
+  UprightFont=400Regular/NotoSansSC_400Regular.ttf,
+  BoldFont=700Bold/NotoSansSC_700Bold.ttf
+]
+\usepackage[margin=2.35cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{enumitem,booktabs,array,longtable,tabularx}
+\usepackage{xcolor,hyperref,cleveref,fancyhdr,titlesec}
+\usepackage{microtype}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+\definecolor{deepblue}{HTML}{16324F}
+\definecolor{softblue}{HTML}{EAF2F8}
+\definecolor{warm}{HTML}{8A4B08}
+\hypersetup{colorlinks=true,linkcolor=deepblue,citecolor=warm,urlcolor=deepblue,
+  pdftitle={Levi--Civita 域上的分析：从真正的无穷小到可计算微分},
+  pdfauthor={个人学习笔记}}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.25em}
+\setlist{nosep,leftmargin=2.2em}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\fancyhead[L]{Levi--Civita 域上的分析}
+\fancyhead[R]{个人学习笔记}
+\fancyfoot[C]{\thepage}
+
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}[definition]{定理}
+\newtheorem{proposition}[definition]{命题}
+\newtheorem{lemma}[definition]{引理}
+\newtheorem{corollary}[definition]{推论}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{说明}
+\newtheorem{example}[definition]{例}
+\newtheorem{question}[definition]{问题}
+
+\newcommand{\LC}{\mathcal R}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\st}{\operatorname{st}}
+\newcommand{\wlim}{\operatorname*{w-lim}}
+
+\title{\bfseries\color{deepblue} Levi--Civita 域上的分析\par
+\large 从真正的无穷小、广义级数到可计算微分\par
+\vspace{0.4em}\normalsize 对 Khodr M. Shamseddine 博士论文\par
+\textit{New Elements of Analysis on the Levi-Civita Field} 的系统阅读笔记}
+\author{个人学习笔记（Reading Notes）}
+\date{2026 年 7 月}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fcolorbox{deepblue}{softblue}{\parbox{0.9\textwidth}{
+\textbf{性质说明。}本文是基于公开论文原文及历史学习讨论整理的个人阅读笔记，
+不是作者本人的科研成果，也不表示笔记整理者参与了原论文研究。
+该论文最初由朋友的导师推荐给朋友学习，笔记整理者因个人兴趣作延伸阅读。
+原论文作者为 Khodr M. Shamseddine，博士论文完成于 Michigan State University（1999），
+导师为 Martin Berz。原文可从作者在 University of Manitoba 的主页直接查阅：
+\href{https://www.physics.umanitoba.ca/~khodr/dissert.pdf}{dissert.pdf}。
+}}
+\end{center}
+
+\begin{abstract}
+本文围绕一个总问题展开：为什么要离开熟悉的实数域，建立一个含有真正无穷小量的
+非阿基米德有序域，并在其上重建级数、拓扑、连续性、微分、积分与数值微分？
+全文首先区分物理动机、数学动机与计算动机；随后从左有限支撑构造 Levi--Civita 域
+$\LC$，解释首项指数、赋值、数量级群与 skeleton group；再讨论域自同构、实闭性、
+代数闭包与微分代数结构。拓扑部分严格比较序拓扑与弱拓扑，验证定义弱拓扑的半范数，
+解释强、弱收敛及相应完备性。分析部分说明为什么普通拓扑连续和可微会出现病态，
+为何需要统一的 Lipschitz 型控制与 derivate functions，并由此引出 expandable functions。
+最后解释计算机函数、浮点数、高阶数值微分、束流物理与分布之间的联系，同时纠正
+“无穷小等于微观基本粒子”以及“left-finite 等于有限支撑”等常见误解。
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{这份笔记要回答的总问题}
+
+历史讨论中的疑问并不是彼此独立的。它们可以压缩为一条主线：
+\[
+\begin{gathered}
+\boxed{\text{需要真正的无穷小}}
+\Longrightarrow
+\boxed{\text{构造可计算的非阿基米德域}}\\[0.5em]
+\Downarrow\\[-0.1em]
+\boxed{\text{恢复微积分定理并服务计算}}
+\Longleftarrow
+\boxed{\text{重新选择合适的拓扑与函数类}}
+\end{gathered}
+\]
+具体问题如下。
+
+\begin{enumerate}
+\item 为什么要放弃实数域的阿基米德性？失去它以后得到什么？
+\item “导数是无穷小增量之商”为什么在新数系中可以严格化？
+\item Dirac delta 或点电荷为什么有时可由真正函数建模？这与分布理论是什么关系？
+\item Levi--Civita 域是怎样被“想到”并构造出来的？已知条件和目标条件分别是什么？
+\item left-finite 是否意味着有限支撑？它与 Hahn 广义级数有什么关系？
+\item 首项指数 $\lambda$ 是什么？例子中的 $3/2$ 从哪里来，有什么含义？
+\item value group、skeleton group、域自同构、代数闭域等概念在做什么？
+\item 微分代数结构为什么出现在“数”本身上？
+\item 序拓扑与弱拓扑分别保留什么信息？弱拓扑为什么由半范数而不是范数定义？
+\item 序拓扑下 Cauchy 完备、非连通、非局部紧以及 $\R$ 的离散性分别意味着什么？
+\item 为什么拓扑连续、拓扑可微仍然可能病态？实分析中哪些结论依赖连通性或紧性？
+\item 为什么引入统一 Lipschitz 型控制？它与 PDE、泛函分析中的“良好函数类”有何共性？
+\item transcendental functions 与 expandable functions 是什么？
+\item extension algebra、floating-point number、computer function 与高阶数值微分为何出现？
+\item 物理中的微观粒子、点电荷和无穷小数是否是同一件事？
+\end{enumerate}
+
+\section{先看全局：论文究竟在完成什么工程}
+
+Shamseddine 的论文不是单独证明一个定理，而是在一个具体的非阿基米德域上重建一套分析学。
+其章节逻辑如下：
+
+\begin{center}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{1.4cm}p{4.2cm}X}
+\toprule
+章节 & 主题 & 在总工程中的作用\\
+\midrule
+Ch.~1 & Motivation, physics, implementation & 说明为什么要真实无穷小，以及为什么要求数系可计算\\
+Ch.~2 & Skeleton groups and automorphisms & 用数量级群和自同构理解非阿基米德扩张的代数骨架\\
+Ch.~3 & $\LC$ 的代数、微分代数、序与拓扑 & 正式构造工作空间，并说明它是域、如何排序、如何收敛\\
+Ch.~4 & Sequences, series, power series & 区分 strong/weak convergence，延拓幂级数与初等超越函数\\
+Ch.~5 & Calculus on $\LC$ & 发现普通连续/可微不足，建立更强的统一微分概念\\
+Ch.~6 & Expandable functions & 找到封闭且满足中值、极值、Rolle、Lagrange 等定理的良好函数类\\
+Ch.~7 & Computer functions & 把真正无穷小用于计算机可表示函数的高阶微分与异常检测\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+因此，论文的路线不是“抛弃实分析”，而是：保留实分析中真正需要的代数、序、完备性与
+幂级数机制，同时有意识地放弃阿基米德性；随后逐项检查哪些经典定理仍成立，哪些必须修改假设。
+
+\section{为什么离开实数域：三类动机必须分开}
+
+\subsection{数学动机：实数没有非零无穷小}
+
+\begin{definition}[阿基米德有序域]
+全序域 $F$ 称为阿基米德的，若对任意 $x\in F$，存在 $n\in\mathbb N$ 使 $n>x$。
+等价地，不存在正元素 $\varepsilon$ 满足
+\[
+0<\varepsilon<\frac1n\qquad\text{对所有 }n\in\mathbb N.
+\]
+\end{definition}
+
+$\R$ 是阿基米德域，所以“比所有正实数尺度都小”的非零元素不可能属于 $\R$。
+经典分析用极限代替真正无穷小：
+\[
+f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}h.
+\]
+这套理论极其成功；论文并不是说它不严谨，而是问：能否在一个更大的域里让 $h\ne0$
+同时 $|h|<1/n$ 对所有 $n$ 成立，从而直接运算差商？
+
+\subsection{计算动机：有限差分中的截断误差与消去误差}
+
+在浮点运算中，以很小的实数 $h$ 计算
+\[
+D_hf(x)=\frac{f(x+h)-f(x)}h
+\]
+存在两种竞争误差：$h$ 不够小导致 Taylor 截断误差，$h$ 太小则 $f(x+h)$ 与 $f(x)$
+非常接近，减法造成有效数字消去。非阿基米德计算的设想是把 $h$ 换成形式上真实存在的
+无穷小 $d$，展开后直接读取 $d^0$ 的系数。例如
+\[
+f(x)=x^2-2x
+\quad\Longrightarrow\quad
+\frac{f(x+d)-f(x)}d=2x-2+d.
+\]
+差商不是等于导数，而是“导数 $+$ 无穷小余项”；取其实部（常数项）精确得到 $2x-2$。
+
+\subsection{物理动机：奇异源的直观表达}
+
+点电荷、点质量、瞬时冲量常由 Dirac delta 表示。经典严格做法是把 $\delta$ 看作分布：
+\[
+\langle\delta_0,\varphi\rangle=\varphi(0).
+\]
+它不是普通实值函数。非阿基米德框架希望用宽度为无穷小、峰值为无穷大的真正函数，
+在适当积分意义下模拟同一作用。
+
+\begin{remark}[必须纠正的物理误解]
+“存在电子、点电荷等微观基本单位”不推出“数学上存在无穷小实数”。一个粒子的电荷量
+是有限的物理常数；点粒子模型是把空间尺度理想化为零维支撑。Levi--Civita 无穷小
+则是有序域内部的非零数，满足比每个正实数都小。两者的逻辑类型不同。
+\end{remark}
+
+\subsection{量子化、点粒子与无穷小：三个层次}
+
+物理中所谓“量子化”是某个可观测量只取离散值，例如电荷常以基本电荷 $e$ 的整数倍出现；
+这说明取值集合离散，却不说明 $e$ 是无穷小。点粒子则是几何理想化：把粒子的空间范围视为
+一个点，从而在连续介质方程中产生集中源。非阿基米德无穷小是第三种东西：它是数域内部
+满足 $0<d<1/n$（任意 $n$）的数量。论文把后两者联系起来，是因为无穷小宽度可为点源提供
+函数模型；它与“自然界存在最小不可分割单位”并无逻辑等价关系。
+
+\section{设计问题：我们知道什么、想要什么}
+
+构造 $\LC$ 前可列一张“需求清单”。
+
+\begin{enumerate}
+\item $\R$ 应作为有序子域嵌入新域；普通实数计算必须保留。
+\item 新域中应存在正无穷小 $d$ 及 $d^q$（$q\in\Q$），以表达细分数量级和开根。
+\item 每个元素应有可读的主导项，从而可比较正负、大小和数量级。
+\item 加法与乘法必须逐系数可计算；每个目标系数不能要求求和无穷多个贡献。
+\item 希望新域是域，最好还实闭，并在相关拓扑下 Cauchy 完备。
+\item 元素应能由逐步增加的有限信息近似存储，而不是完全不可构造的巨大非标准模型。
+\end{enumerate}
+
+自然想法是把元素写成“带实系数、允许有理指数”的形式级数
+\[
+x=\sum_{q\in\Q}x[q]d^q.
+\]
+真正困难不是写下符号，而是限制允许出现的指数集合，使乘法卷积良定义。
+
+\section{left-finite 支撑：不是有限，而是向左局部有限}
+
+\begin{definition}[左有限集合]
+$M\subset\Q$ 称为 left-finite，若对每个 $r\in\Q$，集合
+\[
+M\cap(-\infty,r)=\{q\in M:q<r\}
+\]
+是有限集。
+\end{definition}
+
+“left” 是有数学内容的：指数越小，$d^q$ 的量级越大，因此左侧对应主导的大项。
+left-finite 保证在任何给定量级之前只出现有限项。它不是随便的命名习惯。
+
+\begin{example}
+$M=\{0,1,2,3,\dots\}$ 是 left-finite，但不是有限集；
+$M=\{1,1/2,1/3,\dots\}$ 不是 left-finite，因为在 $r=2$ 左侧有无限多个元素；
+$M=\{-3,0,1/2,2,7,\dots\}$ 只要后续严格递增并趋于 $+\infty$，就是 left-finite。
+\end{example}
+
+非空 left-finite 集有最小元；若无限，则能排成严格递增且趋于 $+\infty$ 的序列。
+所以每个 $x$ 可写成
+\[
+x=x[q_0]d^{q_0}+x[q_1]d^{q_1}+\cdots,
+\qquad q_0<q_1<\cdots\to+\infty.
+\]
+
+\subsection{为何乘法中每个系数只有有限个贡献}
+
+定义
+\[
+(xy)[q]=\sum_{\alpha+\beta=q}x[\alpha]y[\beta].
+\]
+若 $A=\supp(x)$、$B=\supp(y)$ 都 left-finite，则对固定 $q$，满足
+$\alpha\in A,\beta\in B,\alpha+\beta=q$ 的配对只有有限个。理由是：若
+$\beta_0=\min B$，则 $\alpha\le q-\beta_0$；left-finite 使候选 $\alpha$ 有限，
+而 $\beta=q-\alpha$ 随之唯一确定。
+
+这正是“可计算性约束”进入纯代数定义的地方。
+
+\section{Levi--Civita 域及其与 Hahn 级数的关系}
+
+\begin{definition}[Levi--Civita 域]
+\[
+\LC=\{x:\Q\to\R:\supp(x)\text{ 是 left-finite}
+\}.
+\]
+加法逐系数定义，乘法用上述卷积定义。
+\end{definition}
+
+把函数 $x:\Q\to\R$ 写成 $\sum_qx[q]d^q$ 只是记号；其严格对象仍是系数函数。
+实数 $a$ 嵌入为仅在指数 $0$ 处取值 $a$ 的元素。
+
+一般 Hahn 级数域 $k((G))$ 允许支撑为有序阿贝尔群 $G$ 的良序子集。
+Levi--Civita 域取 $k=\R$、$G=\Q$，并施加比“良序”更强的 left-finite 条件。
+因此：
+
+\begin{itemize}
+\item 有限支撑 $\subsetneq$ left-finite 支撑；
+\item left-finite 支撑 $\subsetneq$ 一般良序支撑；
+\item $\LC$ 是 Hahn 型广义级数域的一个更小、更适合逐项计算的子域。
+\end{itemize}
+
+所以“既然 left-finite，为什么还是广义级数”这一疑问的答案是：
+left-finite 从未要求全局有限，它只要求每个左截断有限。
+
+\section{首项指数 $\lambda$、赋值与数量级}
+
+\begin{definition}[支撑与首项指数]
+对 $x\ne0$，定义
+\[
+\lambda(x)=\min\supp(x),\qquad \lambda(0)=+\infty.
+\]
+$x[\lambda(x)]d^{\lambda(x)}$ 是首项。
+\end{definition}
+
+若 $0<d<1/n$ 对所有 $n$ 成立，则指数越大，量越小。因此 $\lambda(x)$ 越小，
+$x$ 的主导数量级越大。并且
+\[
+\lambda(xy)=\lambda(x)+\lambda(y),\qquad
+\lambda(x+y)\ge\min\{\lambda(x),\lambda(y)\},
+\]
+后一式在最低阶项不相消时取等号。这就是非阿基米德赋值的基本形式。
+
+\begin{example}[为什么会出现 $3/2$]
+令
+\[
+x=7d^{3/2}-2d^2+5d^{11/4}.
+\]
+其支撑为 $\{3/2,2,11/4\}$，最小指数是 $3/2$，故
+\[
+\lambda(x)=\frac32.
+\]
+$3/2$ 不是由微分或极限“算出来”的神秘常数，只是第一个非零系数所在的指数。
+它表示 $x$ 与 $d^{3/2}$ 同阶：$x/(d^{3/2})$ 具有非零实首项 $7$。
+\end{example}
+
+\subsection{value group 与 skeleton group}
+
+在赋值论语言中，非零元素的值 $v(x)=\lambda(x)$ 落在有序阿贝尔群 $\Q$ 中；
+因此 $\Q$ 是这里的 value group。论文使用 skeleton group 的等价数量级语言：
+对 $a,b\ne0$，若存在正整数 $m,n$ 使
+\[
+|a|\le m|b|,qquad |b|\le n|a|,
+\]
+则认为 $a,b$ 属于同一 Archimedean class。乘法诱导这些等价类上的加法，得到
+有序阿贝尔群 $S_F$。对 $\R$，所有非零元素同阶，所以 $S_{\R}=\{0\}$；
+对 Laurent 级数域，$S_F\cong\Z$；对 $\LC$，$S_{\LC}\cong\Q$。
+
+可以把 skeleton group 理解成“只保留数量级、忘掉精确系数”的骨架。
+
+\section{第二章的代数最低配：域、自同构与代数闭性}
+
+\subsection{域与域扩张}
+
+域是可作加减乘除（除数非零）的交换环。若 $F\subset E$ 且两者运算相容，称 $E/F$
+为域扩张。这里 $\LC/\R$ 的意义是：$\R$ 被视为常数级数嵌入 $\LC$。
+
+\subsection{自同构为何重要}
+
+域自同构是保持 $0,1,+,\cdot$ 的双射 $\sigma:F\to F$。
+它回答“在不改变代数结构的前提下，这个域自身能怎样重新标记”。任意域自同构固定素域：
+特征零时固定 $\Q$。在有序、实闭等附加结构下，自同构还可能被迫保持序。
+
+论文先在一般非阿基米德域上研究自同构，是因为这能检验结构的刚性与唯一性：
+哪些实数必须固定，哪些无穷小量允许被重新缩放？对某些形式 Laurent 级数域，
+把 $d$ 送到正实倍数或同阶元素可给出非平凡自同构；而在更严格的结构要求下，
+自同构会受到强烈限制。
+
+\subsection{代数元、超越元、代数闭域与实闭域}
+
+\begin{definition}
+若 $\alpha\in E$ 是某个非零多项式 $p\in F[X]$ 的根，则 $\alpha$ 在 $F$ 上代数；
+否则称为超越。若每个 $F[X]$ 中的非常数多项式都在 $F$ 中有根，则 $F$ 代数闭。
+\end{definition}
+
+$\R$ 不是代数闭，因为 $X^2+1$ 无实根；$\C$ 是代数闭域。实闭域 $F$ 可由多种
+等价方式刻画，例如 $F(i)$ 代数闭且 $i^2=-1$，或每个正元素有平方根且每个奇次
+多项式有根。论文证明 / 回顾 $\LC$ 具有实闭性质，而 $\LC(i)$ 代数闭。
+
+这不是装饰性结论。它保证开根、求解局部多项式方程和构造反函数时不会频繁离开当前数系。
+
+\section{微分代数结构：为什么“数”也能被求导}
+
+\begin{definition}[导子]
+域 $F$ 上的导子是映射 $\partial:F\to F$，满足
+\[
+\partial(x+y)=\partial x+\partial y,
+\qquad
+\partial(xy)=(\partial x)y+x(\partial y).
+\]
+配备导子的域称为微分域。
+\end{definition}
+
+在 $\LC$ 上定义
+\[
+(\partial x)[q]=(q+1)x[q+1].
+\]
+若 $x=\sum_qx[q]d^q$，则等价地
+\[
+\partial x=\sum_q q,x[q]d^{q-1},
+\]
+正是把形式变量 $d$ 当作自变量逐项微分。特别地 $\partial(d^q)=qd^{q-1}$。
+
+这里要区分两种导数：
+
+\begin{itemize}
+\item $\partial$ 是 $\LC$ 这个域内部的代数算子，作用于广义数的 $d$-展开；
+\item $f'(x)$ 是函数 $f:\LC\to\LC$ 关于输入变量 $x$ 的微分。
+\end{itemize}
+
+二者在自动微分 / differential algebra 中发生联系：把输入替换为 $x+d$，函数值的
+$d$-系数编码各阶导数。
+
+\section{序结构：首个非零系数决定正负}
+
+对 $x\ne0$，规定
+\[
+x>0\quad\Longleftrightarrow\quad x[\lambda(x)]>0.
+\]
+这与幂级数的字典序比较相似：先比较最重要的最低指数项。由此 $d>0$ 且对每个
+$n\in\mathbb N$ 有 $nd<1$，所以 $d$ 是正无穷小；$d^{-1}$ 是正无穷大。
+
+可定义有限元素、无穷小元素和无穷大元素：
+\[
+\begin{aligned}
+x\text{ 有限}&\iff |x|<n\text{ 对某个 }n\in\mathbb N,\\
+x\text{ 无穷小}&\iff |x|<1/n\text{ 对所有 }n\in\mathbb N,\\
+x\text{ 无穷大}&\iff |x|>n\text{ 对所有 }n\in\mathbb N.
+\end{aligned}
+\]
+有限 $x$ 的常数项 $x[0]$ 扮演 standard part / real part；若
+$x=x[0]+\varepsilon$ 且 $\varepsilon$ 无穷小，则 $x\approx x[0]$。
+
+\section{序拓扑：很强，但强到与熟悉的实线不同}
+
+序绝对值给出开球
+\[
+B(x,\varepsilon)=\{y\in\LC:|y-x|<\varepsilon\},\qquad \varepsilon>0,
+\]
+它们生成 order topology。相应收敛称为 strong convergence：
+\[
+x_n\to x\quad\Longleftrightarrow\quad
+\forall\varepsilon\in\LC_{>0}\ \exists N\ \forall n\ge N, |x_n-x|<\varepsilon.
+\]
+
+注意 $\varepsilon$ 可以是 $d,d^{100}$ 等无穷小，所以这比普通实数误差控制严格得多。
+
+\subsection{Cauchy 完备有什么用}
+
+序拓扑下 Cauchy 完备意味着：如果一个序列最终在每个（包括无穷小）尺度上稳定，
+则其极限仍属于 $\LC$。这是进行无穷级数、固定点迭代、求逆与根的构造时防止极限逃出空间的基础。
+
+但必须强调：这是特定拓扑下的完备性，不自动等于 Dedekind 完备，也不保证每个有界集有上确界。
+
+\subsection{为什么 $\R$ 在诱导序拓扑下是离散的}
+
+对任意实数 $r$，
+\[
+B_{\LC}(r,d)\cap\R=\{r\},
+\]
+因为两个不同实数之差不可能小于正无穷小 $d$。因此 $\R$ 作为 $\LC$ 的子空间是离散的。
+这直接导致纯实序列若在强意义下收敛，则最终必须恒定。
+
+\subsection{三个强收敛例子}
+
+基本无穷小的幂满足 $d^n\to0$（强收敛）：给定 $\varepsilon>0$，取有理数
+$r>\lambda(\varepsilon)$，当 $n>r$ 时 $d^n<\varepsilon$。因此几何级数
+\[
+1+d+d^2+\cdots
+\]
+在强意义下收敛到 $(1-d)^{-1}$。与之相反，普通实序列 $1/n$ 并不在 $\LC$ 的序拓扑中
+强收敛到 $0$：取无穷小误差 $\varepsilon=d$，对每个有限 $n$ 都有 $1/n>d$。
+这三个例子精确说明：strong convergence 主要要求支撑的首项指数不断向右移动，而不仅是
+实系数在通常意义下变小。
+
+\subsection{非连通与非局部紧意味着哪些经典论证失效}
+
+论文证明 $\LC$ 的序拓扑非连通、非局部紧、无可数基，而诱导到 $\R$ 上是离散拓扑。
+于是熟悉的实分析机制不能直接照搬：
+
+\begin{itemize}
+\item $[a,b]$ 不再自动具有 $\R$ 中闭区间的紧性；连续函数未必有界或取得极值。
+\item 区间的拓扑连通性失效，连续像保持连通的论证不能直接推出介值定理。
+\item “导数恒为零则函数在区间上为常数”的经典证明依赖中值定理；缺少相应函数类与条件时会失败。
+\item 局部紧性缺失会影响 Radon 测度、紧支撑函数、分割单位以及调和分析中的若干常规工具。
+\end{itemize}
+
+\section{与熟悉分析结论的精确对照}
+
+\subsection{一维实分析}
+
+在 $\R$ 上，若 $f$ 在区间 $I$ 上可微且 $f'=0$，则由 Lagrange 中值定理
+$f(y)-f(x)=f'(\xi)(y-x)=0$，故 $f$ 常数。关键不是形式微分本身，而是区间的顺序连通性、
+完备性及中值定理的假设链。
+
+\subsection{高维实分析}
+
+若 $U\subset\R^n$ 连通开且 $Df=0$，则开集局部道路连通，连通蕴含道路连通；沿分段
+$C^1$ 路径 $\gamma$ 有
+\[
+\frac d{dt}f(\gamma(t))=Df(\gamma(t))\gamma'(t)=0,
+\]
+故 $f$ 在 $U$ 上常数。若定义域不连通，只能推出每个连通分支上常数。
+
+\subsection{复分析}
+
+若区域 $\Omega\subset\C$ 上全纯函数满足 $f'=0$，则由路径积分或 Cauchy 理论，
+$f$ 在每个连通分支上常数。复分析还具有更强的 identity theorem：零点集若在区域内部
+有聚点，则全纯函数恒为零。这依赖全纯性带来的解析刚性，不只是拓扑连续性。
+
+上述对照告诉我们在新数系中应采用的工作方法：每当一个实分析结论失败，先追踪其证明究竟
+用了紧性、连通性、完备性、局部紧性、可数性，还是函数类的统一正则性，再决定补哪一条。
+
+\section{弱拓扑：只观察有限深度的系数信息}
+
+对 $r\in\Q$ 定义
+\[
+p_r(x)=\|x\|_r:=\max\{|x[q]|:q\le r\}.
+\]
+left-finite 性保证 $q\le r$ 的非零系数只有有限个，所以最大值存在。
+
+\subsection{半范数的基本验证}
+
+对 $a\in\R$ 与 $x,y\in\LC$：
+\[
+\begin{aligned}
+p_r(x)&\ge0,\\
+p_r(ax)&=|a|p_r(x),\\
+p_r(x+y)&=\max_{q\le r}|x[q]+y[q]|\\
+&\le\max_{q\le r}(|x[q]|+|y[q]|)\le p_r(x)+p_r(y).
+\end{aligned}
+\]
+但 $p_r$ 不是范数：若 $t>r$，则 $p_r(d^t)=0$ 而 $d^t\ne0$。它忽略了深度 $r$
+之后的所有更小量级。
+
+整族 $\{p_r:r\in\Q\}$ 能分离点：若 $x\ne0$，取 $r\ge\lambda(x)$，则 $p_r(x)>0$。
+所以单个半范数信息不足，整族半范数却可定义 Hausdorff 型的系数拓扑。
+
+\subsection{论文的弱拓扑与泛函分析弱拓扑：思想相似，定义不同}
+
+泛函分析中 $\sigma(X,X^*)$ 是使每个连续线性泛函 $x^*\in X^*$ 连续的最弱拓扑；
+$x_n\rightharpoonup x$ 意味着 $x^*(x_n)\to x^*(x)$ 对所有 $x^*$ 成立。
+
+论文中的 weak topology 由“截至某个指数深度的系数控制”定义，基本邻域可写成
+\[
+S(x,\varepsilon)=\{y:\|y-x\|_{1/\varepsilon}<\varepsilon\}.
+\]
+二者共同哲学是：不要求在最强距离意义下整体逼近，而只要求一族观测量逐一逼近。
+但两者不是同一个标准定义，不能仅因都叫 weak 就直接套用 Banach 空间定理。
+
+\subsection{为什么弱拓扑在实数子域上恢复通常拓扑}
+
+若 $x\in\R\subset\LC$，只有指数 $0$ 的系数可能非零。当截断深度覆盖 $0$ 时，
+$p_r(x)=|x|$；所以弱邻域在实数子域上正是通常的实数邻域。于是 $1/n$ 虽不强收敛到 $0$，
+却弱收敛到 $0$。这解释了引入弱拓扑的最直接必要性：希望原有的实数极限过程在扩张域中仍被看见。
+
+\subsection{弱收敛、regularity 与完备性}
+
+弱收敛可理解为：对每个有限指数窗口 $q\le r$，系数一致趋近；论文还要求 / 使用
+regularity 来防止支撑在序列中向左无限漂移。
+
+\begin{definition}[regular sequence]
+序列 $(x_n)$ 称为 regular，若
+\[
+\bigcup_{n\ge0}\supp(x_n)
+\]
+仍是 left-finite。
+\end{definition}
+
+regularity 不是光滑正则性，而是支撑正则性：它保证对任意固定左截断，所有序列项合起来
+仍只出现有限多个指数位置。论文的判别准则大意是：若 $(x_n)$ regular，且每个系数
+$x_n[q]$ 在 $\R$ 中收敛到 $x[q]$，则 $x_n$ 弱收敛到 $x$。
+
+例如 $x_n=d^n$ 是 regular，因为联合支撑 $\{1,2,3,\dots\}$ left-finite。
+而 $y_n=d^{1/n}$ 不 regular：联合支撑 $\{1,1/2,1/3,\dots\}$ 在任意 $r>1$ 左侧含无限多点。
+后一序列的每个固定系数位置最终都为零，但“新的支撑点”不断在有限指数区域积聚；若只看逐点系数
+而不加 regularity，便可能错误地把一个不属于允许支撑结构的极限当作 $\LC$ 元素。
+
+强收敛蕴含弱收敛，但反之不必。$\LC$ 在序拓扑下 Cauchy 完备，却在论文的弱拓扑下不完备。
+这并不矛盾：完备性从来依赖所选一致结构 / 度量 / 拓扑。
+
+还要区分两个命题：弱收敛的序列不必由定义自动 regular；论文的充分判据是
+“regular $+$ 每个系数收敛 $\Rightarrow$ 弱收敛”。regularity 是可验证的支撑紧性条件，
+而非弱收敛定义本身的同义改写。
+
+\section{超越函数究竟是什么}
+
+“超越”在这里有两个相关但不同的层次：
+
+\begin{enumerate}
+\item 元素 $\alpha$ 在域 $F$ 上超越：它不满足任何非零 $F$-系数多项式方程。
+\item 超越函数：不是代数函数的函数，典型如 $\exp,\sin,\cos,\log$。
+\end{enumerate}
+
+复分析确实系统研究这些函数，但概念不只属于复分析。论文第 4.4 节利用幂级数在弱拓扑中的
+收敛，把 $\exp,\sin,\cos,\sinh,\cosh$ 等从实数延拓到有限的 $\LC$ 元素。例如
+\[
+\exp(x)=\sum_{n=0}^{\infty}\frac{x^n}{n!},\qquad
+\sin x=\sum_{n=0}^{\infty}(-1)^n\frac{x^{2n+1}}{(2n+1)!}.
+\]
+弱收敛在这里很关键：强收敛对纯实部分过于苛刻，甚至普通实数部分和都未必强收敛；
+而逐系数收敛足以定义延拓并证明加法公式。
+
+\section{为什么普通拓扑连续和可微会病态}
+
+在任意拓扑空间中，连续性只表达“逆像保持开集”或“趋近点映到趋近点”。它不自动提供有界性、
+介值性、极值存在性。实分析中这些额外结论来自定义域的紧性 / 连通性与 $\R$ 的完备序结构。
+
+论文给出若干反例说明：在 $\LC$ 的序拓扑中，一个函数即使在闭区间上拓扑连续，仍可能不有界、
+不取最大最小值、或不满足介值定理。例如与实部映射相关的函数
+\[
+f(x)=x-\operatorname{Re}(x)
+\]
+可在相关意义下连续，却把输入送到无穷小部分；其像集可能有上界但没有最小上界。
+
+此外，拓扑可微只要求差商在点附近收敛。由于定义域拓扑高度不连通，函数可在不同微小“岛屿”上
+独立改变，而局部差商看不见跨岛变化。因此仅靠点态极限不能恢复全局微积分定理。
+
+\section{为何想到统一 Lipschitz 型控制}
+
+论文引入更强连续性：在区间 $I$ 上存在统一常数 $M\in\LC$ 使
+\[
+\left|\frac{f(y)-f(x)}{y-x}\right|\le M,
+\qquad x\ne y\in I.
+\]
+这就是全局 / 区间上的 Lipschitz 型控制。它不是凭空出现的，而是由失败的证明反推：
+若拓扑把区间切碎，必须用一个跨越所有点对的估计重新耦合这些碎片。
+
+同样，较强的 differentiability 不只要求某点差商有极限，还要求 derivate function
+\[
+F_{1,x}(y)=
+\begin{cases}
+\dfrac{f(y)-f(x)}{y-x},&y\ne x,\\[0.7em]
+f'(x),&y=x
+\end{cases}
+\]
+在整个区间上具有统一控制。于是 Taylor 余项、链式法则和中值型定理才重新可用。
+
+\subsection{与其他分析分支的共同模式}
+
+这与许多熟悉做法同构：
+
+\begin{itemize}
+\item PDE 中从弱解筛选 $H^1,W^{k,p},C^{k,\alpha}$ 等带统一范数控制的类；
+\item Arzel\`a--Ascoli 用一致有界与等度连续换取预紧性；
+\item Sobolev 空间把函数与弱导数同时纳入图范数，保证极限仍保留微分信息；
+\item 复分析用全纯性这一强约束获得解析性、最大模原理和唯一延拓；
+\item 调和分析 / 奇异积分中选择对尺度稳定的函数空间以保证算子有界。
+\end{itemize}
+
+共同原则是：\emph{先决定希望哪些运算和极限定理稳定，再选择恰好足够强的函数类。}
+
+\section{Expandable functions：第六章的“良好函数类”}
+
+粗略说，expandable function 是在每个相关点附近都能由 $\LC$ 系数幂级数表示，并满足适当
+弱收敛与相容条件的函数。它推广了从实幂级数延拓来的函数。
+
+该类的关键不是名字，而是闭包性质：
+
+\begin{itemize}
+\item 对加、减、乘以及适当复合封闭，因而形成函数代数；
+\item 可无限次微分，各阶导数仍 expandable；
+\item 具有平移不变的局部幂级数展开；
+\item 在论文条件下恢复 intermediate value、maximum/minimum、Rolle、mean value theorem；
+\item 可积分，并与微分运算良好相容。
+\end{itemize}
+
+“扩张代数”若指这里的 algebra of expandable functions，就是说这族函数在逐点加法和乘法下
+构成代数；它不是另一个凭空增加的数域。若指 extension algebra，则通常是把原代数嵌入更大代数，
+使原本不可做的运算或元素得以加入。在本文语境中，数域扩张 $\R\subset\LC$ 与函数代数闭包
+必须区分。
+
+\subsection{与 $C^k$、$C^\infty$、$C^\omega$ 和全纯函数的关系}
+
+$C^k$ 只保证到 $k$ 阶导数连续；$C^\infty$ 保证任意阶可微，但 Taylor 级数仍可能不等于原函数；
+$C^\omega$（实解析）要求局部等于收敛幂级数。expandable functions 在方法上最接近
+$C^\omega$，因为局部幂级数表示是其刚性来源；但其系数在 $\LC$ 中，收敛采用论文的弱收敛，
+并附带 regularity 条件。
+
+复全纯函数比实解析函数还强：一阶复可微即推出无穷可微和局部幂级数展开，并有唯一延拓、
+最大模原理等刚性。expandable functions 也通过幂级数恢复许多经典定理，但不能因此把它们
+称为“非阿基米德全纯函数”；底层域、维数、拓扑和关键定理均不同。
+
+可把包含关系的精神写成
+\[
+C^\omega\subsetneq C^\infty\subsetneq C^k,
+\]
+而 expandable 类是 $\LC$ 上沿“局部幂级数 $+$ 弱收敛正则性”方向选出的对应物，
+并非简单放入这条实函数包含链中的某一项。
+
+\section{真正无穷小怎样严格化差商}
+
+设实函数 $f$ 能延拓为 $\bar f$，并在 $x$ 附近有 Taylor 展开。对非零无穷小 $h$，
+\[
+\bar f(x+h)=f(x)+f'(x)h+\frac{f''(x)}{2!}h^2+\cdots.
+\]
+于是
+\[
+\frac{\bar f(x+h)-f(x)}h
+=f'(x)+\frac{f''(x)}{2!}h+\frac{f^{(3)}(x)}{3!}h^2+\cdots.
+\]
+取常数项得到 $f'(x)$；更进一步，$h^k$ 的系数编码 $f^{(k+1)}(x)/(k+1)!$。
+
+因此“导数是无穷小增量之商”的精确表述不是
+\[
+f'(x)=\frac{f(x+h)-f(x)}h
+\]
+在 $\LC$ 中逐字相等，而是导数等于该差商的标准实部 / 常数项；差别是严格可控的无穷小余项。
+
+\section{分布能否真的变成函数}
+
+在扩张域上，可以构造高度为无穷大、宽度为无穷小的函数 $\delta_d$，使其积分为 $1$，并对
+足够良好的测试函数满足
+\[
+\int \delta_d(x)\varphi(x)\,dx\approx\varphi(0).
+\]
+这给出“delta 是尖峰函数”的直观模型。但应谨慎表述：
+
+\begin{enumerate}
+\item 经典分布 $\delta$ 是测试函数空间对偶中的连续线性泛函；
+\item 非阿基米德 $\delta_d$ 是扩张数系上的真正函数；
+\item 二者通过对测试函数的作用或取标准部建立对应，而不是在同一集合中完全相等；
+\item 要处理测度、积分、几乎处处等概念，还需额外建立非阿基米德测度与积分理论。
+\end{enumerate}
+
+所以“从分布变成真正函数”是模型层面的实现与表示改变，不是把 Schwartz 分布理论判定为错误。
+
+\section{浮点数、计算机函数与高阶数值微分}
+
+\subsection{浮点数是什么}
+
+计算机通常用有限位二进制浮点数表示实数，抽象形式为
+\[
+\pm m\,\beta^e,
+\]
+其中底数 $\beta$、尾数位数与指数范围有限。大多数实数（甚至 $0.1$）不能被精确表示，
+每次运算需舍入。因此“计算机中的实数”是有限集合，不是数学上的整个 $\R$。
+
+对前向差分，典型总误差具有竞争形式
+\[
+E(h)\approx C_1h+C_2\frac{u}{h},
+\]
+其中第一项是 Taylor 截断误差，第二项来自机器精度 $u$ 与相消误差。$h$ 太大时第一项大，
+$h$ 太小时第二项大；高阶差分还会叠加大组合系数，使稳定区间更窄。
+
+\subsection{computer function 的论文定义}
+
+论文把 intrinsic functions（由基本算术、根、倒数、幂级数初等函数等构成）与 Heaviside
+函数通过有限次算术和复合得到的函数称为 computer functions。这个定义旨在形式化程序中
+可由有限表达式 / 分支构成的函数。
+
+第七章之所以讨论它，是因为论文最终目标之一不是只在抽象域上证明存在性，而是让程序对输入
+$x+d$ 作运算，沿计算图传播 $d$-展开，从而读出高阶导数。这与现代 automatic differentiation
+同属“沿计算过程传播导数信息”的思想，但数据结构与理论基础不同。
+
+\subsection{为什么还能发现不可微分分支}
+
+程序可能包含 $|x|$、Heaviside、条件语句或 piecewise definition。普通有限差分在分支点附近
+可能给出误导结果。非阿基米德扰动保留扰动方向与数量级，论文据此研究在给定实点是否存在一致导数，
+并区分代码中实际经过的光滑分支和潜在不可微结构。
+
+这就是束流物理 / COSY INFINITY 出现的原因：高阶 transfer maps、长期粒子轨道与磁光学系统
+需要大量高阶导数和 Taylor map；手工符号微分膨胀严重，普通有限差分又不稳定，而微分代数可在
+一次程序传播中携带高阶系数。
+
+\subsection{左右无穷小差商与分支检测}
+
+论文第 7 章考虑
+\[
+Q_+=\frac{f(x_0+d)-f(x_0)}d,
+\qquad
+Q_-=\frac{f(x_0)-f(x_0-d)}d.
+\]
+在相应可延拓与连续性条件下，Theorem~7.4 用 $Q_\pm$ 是否至多有限以及二者实部是否相同，
+判定实函数在 $x_0$ 的可微性；若可微，则共同实部给出 $f'(x_0)$。
+
+对 $f(x)=|x|$ 与 $x_0=0$，有 $Q_+=1$、$Q_-=-1$，故不可微。反之，程序即使写成
+\[
+f(x)=\begin{cases}x^2,&x\ge0,\\x^2,&x<0,
+\end{cases}
+\]
+也只是代码有分支，数学函数仍为 $x^2$；左右展开的一阶系数都为 $0$、二阶系数都为 $1$。
+因此该方法试图区分“控制流存在分支”与“函数本身存在不可微点”。
+
+\subsection{高阶导数的两条读取路线}
+
+若
+\[
+f(x_0+d)=f(x_0)+\sum_{j=1}^{n}\alpha_jd^j+O(d^{n+1}),
+\]
+则 $f^{(j)}(x_0)=j!\alpha_j$。这是一遍 Taylor-mode 传播后直接读系数的路线。
+另一条路线是高阶前向差分
+\[
+d^{-n}\sum_{j=0}^{n}(-1)^{n-j}\binom nj f(x_0+jd).
+\]
+在普通浮点数值分析中，该式容易受舍入与相消污染；在形式无穷小代数中，不同误差阶由
+不同的 $d$-幂分离，从而可以按阶读取。
+
+\section{论文与束流物理的关系，不等于论文只为物理服务}
+
+作者同时隶属数学与物理系，论文第 1.4 节和第 7 章明确面向物理计算，尤其是加速器 / 束流系统的
+高阶映射。但 Chs.~2--6 的核心问题是纯数学的：有序域、广义级数、赋值、拓扑、完备性、幂级数、
+函数代数与微积分定理。
+
+因此最合适的理解是：
+\[
+\begin{gathered}
+\text{物理与计算问题提出需求}
+\longrightarrow
+\text{代数和拓扑完成基础设施}\
+\Downarrow\\[-0.2em]
+\text{再回到计算应用}
+\longleftarrow
+\text{分析学筛选良好函数类}
+\end{gathered}
+\]
+
+\section{逐章精读建议：第二次阅读应抓什么}
+
+\subsection*{Chapter 1}
+不要只记“实数不好”。应精确记为：经典实数分析严谨但不含真实无穷小；论文追求的是直观、
+代数可操作与计算可实现的替代表示。重点看 1.1、1.2、1.3、1.5。
+
+\subsection*{Chapter 2}
+先掌握 Archimedean equivalence classes，再看 skeleton group。域自同构部分只需抓住：
+自同构固定 $\Q$；附加序与开根结构限制其自由度；数量级骨架帮助理解非阿基米德扩张。
+
+\subsection*{Chapter 3}
+这是全书地基。必须会复述 left-finite、$\LC$、$\lambda$、$d$、卷积乘法、正序、半范数 $p_r$。
+证明重点是“为什么每个系数只有有限项”和“为什么最低指数控制乘法与序”。
+
+\subsection*{Chapter 4}
+对照表记忆 strong / weak convergence。理解为什么强拓扑使纯实收敛序列最终恒定，因而必须引入弱收敛；
+再看 regularity 如何保证逐系数极限仍属于 $\LC$。
+
+\subsection*{Chapter 5}
+先读反例，再读新定义。否则 Lipschitz 型连续与 derivate function 会显得神出鬼没。
+每个加强条件都应对应一个此前失败的实分析定理。
+
+\subsection*{Chapter 6}
+把 expandable functions 与 $C^{k,\alpha}$、Sobolev、analytic functions 作方法论对照：
+这不是追求最大函数类，而是寻找对运算封闭且足以恢复定理的类。
+
+\subsection*{Chapter 7}
+先补 floating-point、roundoff、cancellation、finite difference 与 automatic differentiation，
+再看 computer functions 和实现；这样才知道本章不是突然改成计算机科学。
+
+\section{与 Barry Simon、Brezis 和经典实分析的连接}
+
+\begin{enumerate}
+\item \textbf{半范数与局部凸思想：}Barry Simon 对由半范数族生成拓扑的讨论提供通用框架；
+单个半范数允许非零核，整族分离点后仍可得到 Hausdorff 局部凸型结构。
+\item \textbf{弱拓扑：}Brezis 中 $\sigma(E,E^*)$ 说明“减少被观察的量以增加收敛序列”的普遍策略；
+但本论文弱拓扑的观测量是低阶系数窗口，不能把两套定理机械等同。
+\item \textbf{紧性：}经典 Heine--Borel、Weierstrass 极值定理、Arzel\`a--Ascoli 都依赖特定拓扑和完备 / 全有界条件；
+换域后必须重新核查。
+\item \textbf{图范数式思维：}Sobolev 范数把函数与导数信息绑定，论文的 stronger differentiability
+把差商函数及其统一控制绑定；二者都是为保证运算与极限闭合。
+\item \textbf{解析函数：}expandable functions 与 analytic functions 都以局部幂级数表示换取刚性，
+但底层域、收敛拓扑和定义域几何不同。
+\end{enumerate}
+
+\section{常见误解集中纠正}
+
+\begin{enumerate}
+\item \textbf{“放弃实数的一切”：}错误。保留 $\R$ 作为子域，并重建相容的代数、序和分析；只放弃阿基米德性。
+\item \textbf{“left-finite 就是有限支撑”：}错误。它只要求每个左截断有限，总支撑可为可数无限。
+\item \textbf{“left 只是习惯”：}不准确。左侧对应较低指数、较大数量级，直接关系到主项和卷积可计算性。
+\item \textbf{“$\lambda=3/2$ 是某个公式算出的”：}通常不是；它是第一个非零项的指数。
+\item \textbf{“weak topology 就是 Banach 空间弱拓扑”：}不是；只能说思想相通。
+\item \textbf{“regularity 指函数光滑”：}在 Ch.~4 的序列语境中，它指联合支撑 left-finite。
+\item \textbf{“超越函数只属于复分析”：}不是；它在实分析、微分方程和代数中也出现。
+\item \textbf{“拓扑连续就应有介值和极值”：}错误；还需要定义域连通 / 紧以及值域结构。
+\item \textbf{“无穷小就是最小物理单元”：}错误；非阿基米德有序域没有必要存在最小正元素。
+\item \textbf{“delta 变成函数，所以分布没用了”：}错误；两套理论通过测试函数作用对应，各有适用范围。
+\item \textbf{“差商直接等于导数”：}通常只在取标准部 / 常数项后等于导数，完整差商还含无穷小高阶项。
+\item \textbf{“第七章只是为了最后硬凑应用”：}不是；可计算性从 left-finite 的最初定义就已参与整个理论设计。
+\end{enumerate}
+
+\section{一页式逻辑总结}
+
+\begin{enumerate}
+\item $\R$ 阿基米德，所以无非零真实无穷小；经典分析以极限严格处理微分。
+\item 为把无穷小差商变成代数运算，需要扩张数域，但又要避免不可表示的巨大结构。
+\item 用 left-finite 的有理指数广义级数构造 $\LC$，既允许无限展开，又保证每个有限深度可计算。
+\item 首项指数 $\lambda$ 提供赋值与数量级；首项系数提供符号，从而得到非阿基米德全序域。
+\item 序拓扑精确控制无穷小尺度并使 $\LC$ Cauchy 完备，但它太强：$\R$ 离散、空间不连通且不局部紧。
+\item 为处理幂级数，引入由低阶系数半范数产生的弱拓扑；强收敛蕴含弱收敛，弱收敛需 regularity 控制支撑。
+\item 普通拓扑连续 / 可微不能恢复实分析定理，于是加强为统一 Lipschitz / derivate-function 控制。
+\item expandable functions 构成对运算、复合、微分封闭的良好代数，并恢复介值、极值和中值等定理。
+\item 对 $x+d$ 运行计算机函数，$d$-展开系数编码各阶导数；这连接微分代数、自动微分与束流物理。
+\item 点电荷只提供奇异源动机；无穷小数与微观粒子不是同一种对象。
+\end{enumerate}
+
+\appendix
+\section{历史聊天问题索引}
+
+以下按主题保存历史讨论中需要继续追问的位置，便于网站全文检索。
+
+\begin{longtable}{p{0.27\textwidth}p{0.66\textwidth}}
+\toprule
+关键词 & 核心定位\\
+\midrule
+\endhead
+为何非阿基米德 & 见第 3--4 节：真实无穷小、计算差商、奇异源三类动机\\
+left-finite / Hahn & 见第 5--6 节：向左局部有限，不等于全局有限\\
+$\lambda=3/2$ & 见第 7 节：首个非零系数的有理指数，表示数量级\\
+value / skeleton group & 见第 7 节：赋值像与 Archimedean 等价类的数量级骨架\\
+automorphism / algebraic closure & 见第 8 节：结构刚性、实闭域与复化代数闭\\
+differential algebra & 见第 9 节：对形式无穷小变量 $d$ 逐项求导\\
+order / weak topology & 见第 11、13 节：无穷小尺度控制与有限深度系数控制\\
+seminorm verification & 见第 13 节：齐次性、三角不等式与非零核\\
+regularity & 见第 13 节：联合支撑 left-finite，不是通常光滑正则性\\
+transcendental functions & 见第 14 节：用弱收敛幂级数延拓初等函数\\
+continuity pathologies & 见第 15 节：缺少连通 / 紧性以及点间统一控制\\
+Lipschitz control & 见第 16 节：用全区间估计重新耦合拓扑碎片\\
+expandable functions & 见第 17 节：对运算封闭并恢复经典微积分定理\\
+distribution / point charge & 见第 3、19 节：测试函数泛函与无穷小尖峰函数的对应\\
+floating point / computer function & 见第 20 节：有限表示、舍入、计算图与高阶导数\\
+beam physics & 见第 20--21 节：高阶 transfer map 与 COSY INFINITY 背景\\
+\bottomrule
+\end{longtable}
+
+\section{分享聊天的原始提问与结构}
+
+分享链接
+\href{https://chatgpt.com/share/6a528186-461c-83ea-90a8-dae02dc35c59}{“论文内容与关联分析”}
+中实际包含三轮用户消息：
+
+\begin{enumerate}
+\item “大概先总结一下这篇论文的主要内容，并且帮我从本地书和云端书看看这一篇论文和哪些内容关联度较大，先为基础概念铺垫一下。”
+\item “继续下一部分，现在上面基本明白了。”
+\item “继续下一部分，现在上面总体上明白了。”
+\end{enumerate}
+
+三篇长回答依次覆盖：
+
+\begin{enumerate}
+\item 动机、阿基米德性、Dirac delta、物理解释、$\LC$ 构造、left-finite、Hahn 级数、
+$\lambda$、赋值、域自同构、skeleton/value group、代数闭性；
+\item 微分代数、order topology、strong/weak convergence、$\R$ 的离散性、Cauchy 完备、
+不连通与不局部紧、半范数、regularity、超越函数；
+\item 拓扑连续 / 可微的病态、Lipschitz 与 derivate function、expandable functions、
+与常见函数空间的对照、浮点数、数值微分、computer functions、分支检测与高阶导数。
+\end{enumerate}
+
+本文没有按聊天的时间顺序逐字重复这些回答，而是以论文逻辑重新编排；每一主题均已在前文及
+“历史聊天问题索引”中给出定位。这样既保留聊天覆盖的内容，又避免公式在网页渲染转录中重复出现。
+
+\section{记号速查}
+
+\begin{tabularx}{\textwidth}{p{0.2\textwidth}X}
+\toprule
+记号 & 含义\\
+\midrule
+$\LC$ & 实 Levi--Civita 域\\
+$d$ & 支撑仅含 $1$、系数为 $1$ 的基本正无穷小\\
+$x[q]$ & $x$ 在指数 $q$ 处的实系数\\
+$\supp(x)$ & 非零系数所在的有理指数集合\\
+$\lambda(x)$ & $x\ne0$ 的最小支撑指数；$\lambda(0)=+\infty$\\
+$p_r(x)=\|x\|_r$ & 截至指数 $r$ 的最大系数绝对值半范数\\
+strong convergence & 序拓扑收敛，对所有正的 $\LC$-误差成立\\
+weak convergence & 由半范数 / 有限深度系数控制产生的收敛\\
+regular sequence & 全体序列项的联合支撑 left-finite\\
+expandable function & 局部由相容的 $\LC$ 系数幂级数表示的良好函数\\
+\bottomrule
+\end{tabularx}
+
+\section{参考文献与原文入口}
+
+\begin{thebibliography}{99}
+\bibitem{Shamseddine1999}
+K.~M. Shamseddine,
+\emph{New Elements of Analysis on the Levi-Civita Field},
+Ph.D. dissertation, Michigan State University, 1999.
+\href{https://www.physics.umanitoba.ca/~khodr/dissert.pdf}{Author-hosted PDF}.
+
+\bibitem{ShamseddineBerz2010}
+K.~Shamseddine and M.~Berz,
+``Analysis on the Levi--Civita field, a brief overview,''
+in \emph{Advances in $p$-Adic and Non-Archimedean Analysis}, 2010.
+
+\bibitem{Hahn1907}
+H.~Hahn,
+``\"Uber die nichtarchimedischen Gr\"o\ss ensysteme,''
+\emph{Sitzungsberichte der Kaiserlichen Akademie der Wissenschaften}, 1907.
+
+\bibitem{Brezis}
+H.~Brezis,
+\emph{Functional Analysis, Sobolev Spaces and Partial Differential Equations},
+Springer, 2011.
+
+\bibitem{Simon}
+B.~Simon,
+\emph{A Comprehensive Course in Analysis, Part 1: Real Analysis},
+American Mathematical Society, 2015.
+
+\bibitem{Lang}
+S.~Lang,
+\emph{Algebra}, revised third edition, Springer, 2002.
+\end{thebibliography}
+
+\end{document}

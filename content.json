@@ -1,0 +1,825 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-16T02:04:11.941Z",
+  "source": "https://academic-portfolio.william-hg1216.chatgpt.site",
+  "questions": [
+    {
+      "slug": "born-rule-projection",
+      "number": "Q.005",
+      "title": "为什么投影长度的平方被解释为概率？",
+      "englishTitle": "Projection geometry and the Born rule",
+      "category": "数学物理",
+      "tags": [
+        "Born rule",
+        "Hilbert 空间",
+        "正交投影"
+      ],
+      "date": "2026.07.08",
+      "status": "已整理",
+      "excerpt": "区分物理公设与 Hilbert 空间几何：线性代数解释一致性，但不单独推出 Born 规则。",
+      "originalQuestion": "为什么事件成立的概率是 ⟨ψ,Pψ⟩？归一化状态又是什么？",
+      "prerequisites": [
+        "复 Hilbert 空间",
+        "归一化向量",
+        "正交投影",
+        "量子态与可观测量"
+      ],
+      "coreNote": [
+        "Born 规则是量子力学的物理公设，而不是从线性代数定理单独推导出的结论。",
+        "若 ‖ψ‖=1 且 P 是正交投影，则 ⟨ψ,Pψ⟩=‖Pψ‖²，数值位于 [0,1]。",
+        "投影分解保证互斥事件的概率可加；Hilbert 空间几何说明该表达式为何具有概率所需的结构。"
+      ],
+      "related": [
+        "frechet-derivative-first-variation"
+      ],
+      "resources": [
+        {
+          "label": "Born rule · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Born_rule"
+        },
+        {
+          "label": "Projection-valued measure · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Projection-valued_measure"
+        }
+      ]
+    },
+    {
+      "slug": "complex-rigidity-conformality",
+      "number": "Q.004",
+      "title": "复分析的刚性是否来自保角性？",
+      "englishTitle": "Complex rigidity beyond conformality",
+      "category": "复分析",
+      "tags": [
+        "复结构",
+        "Cauchy–Riemann",
+        "解析延拓"
+      ],
+      "date": "2026.07.09",
+      "status": "继续追问",
+      "excerpt": "比较复线性、Cauchy–Riemann 方程、保角性与解析延拓之间的逻辑层次。",
+      "originalQuestion": "复变函数的刚性根源是不是与 i 相容的复线性？保角只是外在表现吗？",
+      "prerequisites": [
+        "实微分与复微分",
+        "复结构 J",
+        "Cauchy–Riemann 方程",
+        "解析延拓"
+      ],
+      "coreNote": [
+        "全纯映射的微分与复结构相容，即 df∘J=J∘df；这是对实微分的强约束。",
+        "非零复线性映射在二维实平面上表现为旋转加伸缩，因此局部保角是结果之一。",
+        "真正的刚性还依赖椭圆型 Cauchy–Riemann 方程带来的高正则性、唯一延拓与解析性，不能只用保角概括。"
+      ],
+      "related": [
+        "laplace-fourier-transform"
+      ],
+      "resources": [
+        {
+          "label": "Holomorphic function · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Holomorphic_function"
+        },
+        {
+          "label": "Complex structure · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Complex_structure"
+        }
+      ]
+    },
+    {
+      "slug": "constant-width-u3-meissner",
+      "number": "Q.007",
+      "title": "U₃、Meissner 体与四面体对称性",
+      "englishTitle": "Constant-width bodies with tetrahedral symmetry",
+      "category": "凸几何",
+      "tags": [
+        "等宽体",
+        "Meissner 体",
+        "U₃"
+      ],
+      "date": "2026.07.06",
+      "status": "研究中",
+      "excerpt": "追踪几何体的构造来源、对称群和体积计算方法，建立项目中的对象词典。",
+      "originalQuestion": "U₃ 是怎么来的？为什么具有完整四面体对称性？它与 Meissner 体、Roberts body、peabodies 有什么关系？",
+      "prerequisites": [
+        "支撑函数",
+        "等宽凸体",
+        "Reuleaux 四面体",
+        "群作用与对称性"
+      ],
+      "coreNote": [
+        "理解一个命名几何体时要分开记录：生成数据、边界替换规则、等宽性的证明以及保留下来的对称群。",
+        "Meissner 体由 Reuleaux 四面体的三条边作特定磨圆得到；选择哪组三条边会影响可见对称性。",
+        "U₃ 等对象必须回到原论文的精确定义与图示核对，不能只根据名称或数值表推测构造。"
+      ],
+      "related": [
+        "geodesic-curvature-gauss-bonnet"
+      ],
+      "resources": [
+        {
+          "label": "Meissner body · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Meissner_body"
+        },
+        {
+          "label": "Body of constant width · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Body_of_constant_width"
+        }
+      ]
+    },
+    {
+      "slug": "frechet-derivative-first-variation",
+      "number": "Q.001",
+      "title": "为什么 Fréchet 导数就是第一变分？",
+      "englishTitle": "Fréchet derivative and first variation",
+      "category": "分析与 PDE",
+      "tags": [
+        "变分法",
+        "Fréchet 导数",
+        "泛函分析"
+      ],
+      "date": "2026.07.10",
+      "status": "继续追问",
+      "excerpt": "区分导数作为有界线性算子、方向导数以及沿扰动曲线得到的第一变分。",
+      "originalQuestion": "什么时候 DE(u) 就是第一变分？为什么我感觉第一变分本来就是 DE(u)？",
+      "prerequisites": [
+        "赋范空间中的 Fréchet 导数",
+        "方向导数",
+        "泛函 E:X→ℝ",
+        "扰动曲线 u+tφ"
+      ],
+      "coreNote": [
+        "DE(u) 是定义在整个切向空间上的有界线性泛函；它本身不是一个数。",
+        "给定具体变分方向 φ 后，第一变分通常写成 δE(u;φ)=DE(u)[φ]。因此二者表达的是同一个一阶信息，但对象层次不同。",
+        "若只存在所有方向导数而不能组成关于 φ 的连续线性泛函，则不能直接把它们称为 Fréchet 导数。"
+      ],
+      "related": [
+        "holder-continuity-regularity"
+      ],
+      "resources": [
+        {
+          "label": "Fréchet derivative · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Fr%C3%A9chet_derivative"
+        },
+        {
+          "label": "First variation · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/First_variation"
+        }
+      ]
+    },
+    {
+      "slug": "geodesic-curvature-gauss-bonnet",
+      "number": "Q.002",
+      "title": "为什么这里需要测地曲率？",
+      "englishTitle": "Geodesic curvature in Gauss–Bonnet",
+      "category": "微分几何",
+      "tags": [
+        "测地曲率",
+        "Gauss–Bonnet",
+        "球面几何"
+      ],
+      "date": "2026.07.10",
+      "status": "已整理",
+      "excerpt": "从空间曲率的切向分解出发，说明边界项为何进入球面区域的 Gauss–Bonnet 公式。",
+      "originalQuestion": "计算 Reuleaux 四面体球面面片时，为什么要求测地曲率？ν·k=1/2 又是怎么得到的？",
+      "prerequisites": [
+        "曲面上的正则曲线",
+        "曲率向量分解",
+        "法曲率与测地曲率",
+        "Gauss–Bonnet 定理"
+      ],
+      "coreNote": [
+        "边界曲线在三维空间中的曲率同时包含曲面法向分量与曲面切向分量；后者就是测地曲率。",
+        "Gauss–Bonnet 把区域内部的高斯曲率、边界的测地曲率和角点外角联系起来，所以求球面面片面积时自然需要边界项。",
+        "ν·k 的具体数值来自两支撑球面的圆交线几何，必须结合所采用的单位法向与半径约定核对符号。"
+      ],
+      "related": [
+        "constant-width-u3-meissner",
+        "holonomy-not-homology"
+      ],
+      "resources": [
+        {
+          "label": "Geodesic curvature · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Geodesic_curvature"
+        },
+        {
+          "label": "Gauss–Bonnet theorem · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Gauss%E2%80%93Bonnet_theorem"
+        }
+      ]
+    },
+    {
+      "slug": "holder-continuity-regularity",
+      "number": "Q.006",
+      "title": "Hölder 连续究竟为分析提供了什么？",
+      "englishTitle": "Why Hölder continuity matters",
+      "category": "分析与 PDE",
+      "tags": [
+        "Hölder 连续",
+        "正则性",
+        "半范数"
+      ],
+      "date": "2026.07.09",
+      "status": "研究中",
+      "excerpt": "从振荡控制、紧性和 Schauder 正则性理解 Hölder 空间，而不只把它视为连续性的刻度。",
+      "originalQuestion": "为什么 Hölder 连续重要？为什么引入 Hölder 半范数，它为 PDE 正则性带来什么？",
+      "prerequisites": [
+        "一致连续",
+        "模连续性",
+        "半范数",
+        "Arzelà–Ascoli 定理"
+      ],
+      "coreNote": [
+        "Hölder 条件以幂律方式定量控制局部振荡，比单纯连续性携带更多尺度信息。",
+        "半范数只测量函数的振荡，不检测常数部分；再加上上确界范数便得到完整的 Hölder 范数。",
+        "统一的 Hölder 控制可导出等度连续与紧性，并与椭圆、抛物方程的 Schauder 估计自然匹配。"
+      ],
+      "related": [
+        "frechet-derivative-first-variation",
+        "laplace-fourier-transform"
+      ],
+      "resources": [
+        {
+          "label": "Hölder condition · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/H%C3%B6lder_condition"
+        },
+        {
+          "label": "Schauder estimates · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Schauder_estimates"
+        }
+      ]
+    },
+    {
+      "slug": "holonomy-not-homology",
+      "number": "Q.003",
+      "title": "Holonomy 不是 Homology：它究竟测量什么？",
+      "englishTitle": "Holonomy, parallel transport, and curvature",
+      "category": "微分几何",
+      "tags": [
+        "Holonomy",
+        "联络",
+        "平行移动"
+      ],
+      "date": "2026.07.09",
+      "status": "研究中",
+      "excerpt": "沿闭曲线平行移动向量，比较回到起点后的偏转，并把它与曲率联系起来。",
+      "originalQuestion": "Holonomy 是干什么的？它和 Homotopy、Homology 有关系吗？",
+      "prerequisites": [
+        "向量丛",
+        "联络",
+        "协变导数",
+        "沿曲线的平行移动"
+      ],
+      "coreNote": [
+        "Holonomy 指沿闭曲线平行移动后在同一纤维中得到的线性变换，而不是同调群。",
+        "所有基于某点闭曲线得到的变换构成 holonomy group；它记录联络绕圈后的整体效应。",
+        "曲率是无穷小 holonomy 的生成元。闭曲线的同伦类会影响 holonomy，但二者不是同一个概念。"
+      ],
+      "related": [
+        "geodesic-curvature-gauss-bonnet"
+      ],
+      "resources": [
+        {
+          "label": "Holonomy · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Holonomy"
+        },
+        {
+          "label": "Parallel transport · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Parallel_transport"
+        }
+      ]
+    },
+    {
+      "slug": "laplace-fourier-transform",
+      "number": "Q.008",
+      "title": "Laplace 变换是特殊的 Fourier 变换吗？",
+      "englishTitle": "Laplace and Fourier transforms",
+      "category": "分析与 PDE",
+      "tags": [
+        "Laplace 变换",
+        "Fourier 变换",
+        "复频率"
+      ],
+      "date": "2026.07.05",
+      "status": "继续追问",
+      "excerpt": "把两种积分变换放入复频率框架，比较定义域、收敛机制和应用场景。",
+      "originalQuestion": "Laplace 变换是特殊的 Fourier 变换吗？两者到底是什么关系？",
+      "prerequisites": [
+        "Fourier 变换",
+        "指数权重",
+        "复变量",
+        "积分收敛"
+      ],
+      "coreNote": [
+        "双边 Laplace 变换可写成复频率 s=σ+iξ 下，对 e^{-σt}f(t) 作 Fourier 变换。",
+        "Fourier 变换对应虚轴 σ=0；但这一限制只有在积分或分布意义下存在时才合法。",
+        "Laplace 变换通过实部 σ 提供指数衰减，更适合初值问题、因果系统与增长函数。"
+      ],
+      "related": [
+        "complex-rigidity-conformality",
+        "holder-continuity-regularity"
+      ],
+      "resources": [
+        {
+          "label": "Laplace transform · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Laplace_transform"
+        },
+        {
+          "label": "Fourier transform · Wikipedia",
+          "href": "https://en.wikipedia.org/wiki/Fourier_transform"
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "slug": "a-conjugate-gram-metric",
+      "title": "从 Gram 矩阵到 A-共轭方向",
+      "subtitle": "内积、度量与共轭梯度的统一理解",
+      "category": "线性代数 · 最优化",
+      "date": "2026",
+      "pages": 6,
+      "description": "把 A-共轭理解为正定矩阵 A 诱导内积下的正交，并联系 Gram 矩阵、二次型和共轭梯度法。",
+      "topics": [
+        "A-共轭",
+        "Gram 矩阵",
+        "正定矩阵",
+        "共轭梯度"
+      ],
+      "pdf": "./mirror-assets/a-conjugate-gram-metric-main.pdf",
+      "cover": "./mirror-assets/a-conjugate-gram-metric-cover.png"
+    },
+    {
+      "slug": "colouring-sparse-oriented-graphs",
+      "title": "稀疏定向图的着色",
+      "subtitle": "Alexander Clow 的 Seminar 笔记；中英双语版本",
+      "category": "图论 · 组合数学",
+      "date": "2026.07.15",
+      "pages": 20,
+      "pageLabel": "中文 20 页 · English 22 pages",
+      "description": "围绕 oriented chromatic number、图同态、tournament 与稀疏定向图的着色问题，整理本次数学 Seminar 的基本定义、主要背景与报告内容。",
+      "topics": [
+        "oriented chromatic number",
+        "图同态",
+        "tournament",
+        "稀疏图",
+        "组合数学"
+      ],
+      "pdf": "./mirror-assets/colouring-sparse-oriented-graphs-main.pdf",
+      "alternatePdf": "./mirror-assets/colouring-sparse-oriented-graphs-alternate.pdf",
+      "alternateLabel": "English PDF",
+      "cover": "./mirror-assets/colouring-sparse-oriented-graphs-cover.png"
+    },
+    {
+      "slug": "commutator-rank",
+      "title": "交换子映射的秩估计：三种解法",
+      "subtitle": "由中心化子维数证明 rank(ad_A)≤n²−n",
+      "category": "线性代数",
+      "date": "2026",
+      "pages": 5,
+      "description": "把交换子映射的秩估计归约为中心化子维数下界，并比较 Jordan 块、循环子空间和多项式代数等证明路径。",
+      "topics": [
+        "交换子",
+        "中心化子",
+        "Jordan 块",
+        "秩-零化度"
+      ],
+      "pdf": "./mirror-assets/commutator-rank-main.pdf",
+      "cover": "./mirror-assets/commutator-rank-cover.png"
+    },
+    {
+      "slug": "evans-case1-dynamics",
+      "title": "Evans 特征线 Case 1 的全局障碍",
+      "subtitle": "唯一零点与边界入流并不推出共同吸引点",
+      "category": "PDE · 动力系统",
+      "date": "2026.04.29",
+      "pages": 7,
+      "description": "澄清 Evans 特征线例子中的全局动力学假设，以显式反例和 ω-极限集说明为何唯一零点与边界入流仍不足够。",
+      "topics": [
+        "特征线",
+        "吸引点",
+        "ω-极限集",
+        "Lyapunov 函数"
+      ],
+      "pdf": "./mirror-assets/evans-case1-dynamics-main.pdf",
+      "cover": "./mirror-assets/evans-case1-dynamics-cover.png"
+    },
+    {
+      "slug": "genus-abel",
+      "title": "亏格、椭圆积分与 Abel 函数",
+      "subtitle": "一份最小定位笔记",
+      "category": "拓扑 · 复分析",
+      "date": "2026.05.15",
+      "pages": 9,
+      "description": "统一定位曲面亏格、Euler 特征数、Riemann 曲面、椭圆积分、Abelian integral 与 Jacobian variety 之间的关系。",
+      "topics": [
+        "亏格",
+        "Gauss–Bonnet",
+        "Abel–Jacobi",
+        "Riemann 曲面"
+      ],
+      "pdf": "./mirror-assets/genus-abel-main.pdf",
+      "cover": "./mirror-assets/genus-abel-cover.png"
+    },
+    {
+      "slug": "grad-div-curl-lie-algebra",
+      "title": "从 Grad–Div–Curl 到 Lie 代数",
+      "subtitle": "局部线性化、反对称矩阵与二维/三维/四维旋转",
+      "category": "微分几何 · Lie 理论",
+      "date": "2026.05.02",
+      "pages": 16,
+      "description": "由向量场的一阶 Taylor 线性化解释 div 与 curl，说明 curl 的 2-形式本质及其与 so(n)、矩阵交换子和 Lie bracket 的关系。",
+      "topics": [
+        "curl",
+        "2-形式",
+        "so(n)",
+        "Lie bracket"
+      ],
+      "pdf": "./mirror-assets/grad-div-curl-lie-algebra-main.pdf",
+      "cover": "./mirror-assets/grad-div-curl-lie-algebra-cover.png"
+    },
+    {
+      "slug": "heat-forward-euler-stability",
+      "title": "热方程向前 Euler 的 Fourier 稳定性分析",
+      "subtitle": "从分离变量、离散模态到 Richardson 格式不稳定",
+      "category": "数值 PDE",
+      "date": "2026",
+      "pages": 8,
+      "description": "从连续热方程的模态分解过渡到离散 Fourier 模态，推导 FTCS 稳定性条件并解释复指数、对角化和放大因子。",
+      "topics": [
+        "Forward Euler",
+        "FTCS",
+        "Fourier 模态",
+        "稳定性"
+      ],
+      "pdf": "./mirror-assets/heat-forward-euler-stability-main.pdf",
+      "cover": "./mirror-assets/heat-forward-euler-stability-cover.png"
+    },
+    {
+      "slug": "inner-product-spectral",
+      "title": "内积空间、正交标准型与谱理论",
+      "subtitle": "从普通相似到正交/酉相似的线性代数主线",
+      "category": "线性代数",
+      "date": "2026.06.03",
+      "pages": 10,
+      "description": "梳理 Gram 矩阵、伴随算子、正交与酉变换、正规算子以及有限维谱定理之间的结构关系。",
+      "topics": [
+        "内积空间",
+        "伴随算子",
+        "酉相似",
+        "谱定理"
+      ],
+      "pdf": "./mirror-assets/inner-product-spectral-main.pdf",
+      "cover": "./mirror-assets/inner-product-spectral-cover.png"
+    },
+    {
+      "slug": "intro-to-lean",
+      "title": "Lean 入门",
+      "subtitle": "2026 年 6 月 24 日的形式化数学入门讲义",
+      "category": "数学导论 · 形式化证明",
+      "date": "2026.06.24",
+      "pages": 17,
+      "description": "Lean 形式化证明的入门材料，作为理解定理证明器、类型论与数学表达形式化的起点。",
+      "topics": [
+        "Lean",
+        "形式化证明",
+        "类型论",
+        "定理证明器"
+      ],
+      "pdf": "./mirror-assets/intro-to-lean-main.pdf",
+      "alternatePdf": "./mirror-assets/intro-to-lean-alternate.pdf",
+      "alternateLabel": "（Only the English version is available）",
+      "cover": "./mirror-assets/intro-to-lean-cover.png"
+    },
+    {
+      "slug": "jordan-two-paths",
+      "title": "Jordan 标准型证明路线对比",
+      "subtitle": "结构化方法与 λ-矩阵方法的角色分工",
+      "category": "线性代数 · 模论",
+      "date": "2026",
+      "pages": 2,
+      "description": "比较广义特征空间/Jordan 链路线与 λ-矩阵/Smith 标准型路线，解释后者在任意域和相似分类中的必要性。",
+      "topics": [
+        "Jordan 标准型",
+        "λ-矩阵",
+        "Smith 标准型",
+        "有理标准型"
+      ],
+      "pdf": "./mirror-assets/jordan-two-paths-main.pdf",
+      "cover": "./mirror-assets/jordan-two-paths-cover.png"
+    },
+    {
+      "slug": "kkt-farkas",
+      "title": "Farkas 引理、Fritz John、KKT 与 Slater 条件",
+      "subtitle": "从 Lax 第 13 章到约束最优化的一阶条件",
+      "category": "运筹学 · 凸分析",
+      "date": "2026.05.28",
+      "pages": 20,
+      "description": "从无可行下降方向出发，整理 Farkas 对偶判据、约束规范、KKT 必要性与凸情形下的充分性。",
+      "topics": [
+        "Farkas 引理",
+        "KKT",
+        "Slater 条件",
+        "切锥与法锥"
+      ],
+      "pdf": "./mirror-assets/kkt-farkas-main.pdf",
+      "cover": "./mirror-assets/kkt-farkas-cover.png"
+    },
+    {
+      "slug": "lagrange-defining-function",
+      "title": "从约束方程到 Lagrange 乘数法",
+      "subtitle": "defining function、满秩条件与两个坏情形",
+      "category": "微分流形 · 最优化",
+      "date": "2026.05.07",
+      "pages": 11,
+      "description": "区分约束集合与约束方程的写法，说明 regular level set 与满秩条件如何保证一阶线性化正确切出切空间。",
+      "topics": [
+        "Lagrange 乘数",
+        "defining function",
+        "正则值",
+        "切空间"
+      ],
+      "pdf": "./mirror-assets/lagrange-defining-function-main.pdf",
+      "cover": "./mirror-assets/lagrange-defining-function-cover.png"
+    },
+    {
+      "slug": "levi-civita-field-reading-notes",
+      "title": "Levi–Civita 域上的分析",
+      "subtitle": "从真正的无穷小、广义级数到可计算微分",
+      "category": "非阿基米德分析 · 数值微分",
+      "date": "2026.07.11",
+      "pages": 19,
+      "pageLabel": "中文 19 页 · English 10 pages",
+      "description": "对 Shamseddine 博士论文的系统个人阅读笔记：从 left-finite 支撑、首项指数、skeleton/value group、序拓扑与弱拓扑，到 expandable functions、计算机函数和高阶微分。本文仅为学习整理，并非本人的科研成果。",
+      "topics": [
+        "Levi–Civita field",
+        "非阿基米德分析",
+        "弱拓扑",
+        "自动微分"
+      ],
+      "pdf": "./mirror-assets/levi-civita-field-reading-notes-main.pdf",
+      "alternatePdf": "./mirror-assets/levi-civita-field-reading-notes-alternate.pdf",
+      "alternateLabel": "English PDF",
+      "latexSources": [
+        {
+          "label": "中文 LaTeX",
+          "href": "./mirror-assets/levi-civita-field-reading-notes-source-1.tex"
+        },
+        {
+          "label": "English LaTeX",
+          "href": "./mirror-assets/levi-civita-field-reading-notes-source-2.tex"
+        }
+      ],
+      "source": {
+        "label": "论文原文 · Shamseddine (1999)",
+        "href": "https://www.physics.umanitoba.ca/~khodr/dissert.pdf"
+      },
+      "cover": "./mirror-assets/levi-civita-field-reading-notes-cover.png"
+    },
+    {
+      "slug": "math-map-undergraduates",
+      "title": "从欧式空间出发：给数学专业本科生的一张基础数学地图",
+      "subtitle": "分析、代数、几何、拓扑、数论、概率与计算的故事版导论",
+      "category": "数学导论",
+      "date": "2026.05.12",
+      "pages": 40,
+      "description": "以 Rⁿ 同时承载的多层结构为入口，为本科生建立基础数学各方向及其交叉关系的总体地图。",
+      "topics": [
+        "数学导论",
+        "课程地图",
+        "Rn",
+        "学科交叉"
+      ],
+      "pdf": "./mirror-assets/math-map-undergraduates-main.pdf",
+      "cover": "./mirror-assets/math-map-undergraduates-cover.png"
+    },
+    {
+      "slug": "newton-hermite-spline",
+      "title": "从 Newton 逐次增广法到 Hermite 与样条插值",
+      "subtitle": "一份关于“牛顿乱插法”的教学讲义",
+      "category": "数值分析 · 插值",
+      "date": "2026.05.08",
+      "pages": 13,
+      "description": "以逐次增广为主线统一 Lagrange、Newton、Hermite、分段插值与三次样条，并解释插入顺序为何不改变最终结果。",
+      "topics": [
+        "Newton 插值",
+        "Hermite 插值",
+        "三次样条",
+        "插值余项"
+      ],
+      "pdf": "./mirror-assets/newton-hermite-spline-main.pdf",
+      "cover": "./mirror-assets/newton-hermite-spline-cover.png"
+    },
+    {
+      "slug": "numerical-integration",
+      "title": "数值积分：简洁复习大纲",
+      "subtitle": "附高维求积、体积估计与维数灾难；中英双语版本",
+      "category": "数值分析 · 计算几何",
+      "date": "2026",
+      "pages": 9,
+      "pageLabel": "中文 9 页 · English 8 pages",
+      "description": "从一般求积公式、Newton–Cotes、Romberg 与 Gaussian quadrature 出发，延伸到高维积分、Monte Carlo、稀疏网格和体积估计。",
+      "topics": [
+        "Gaussian quadrature",
+        "Romberg",
+        "维数灾难",
+        "Monte Carlo"
+      ],
+      "pdf": "./mirror-assets/numerical-integration-main.pdf",
+      "alternatePdf": "./mirror-assets/numerical-integration-alternate.pdf",
+      "alternateLabel": "English PDF",
+      "cover": "./mirror-assets/numerical-integration-cover.png"
+    },
+    {
+      "slug": "orthogonal-transform",
+      "title": "线性变换、正交矩阵与实对称矩阵正交对角化",
+      "subtitle": "从“默认基”到“正交对角化”的几何理解",
+      "category": "线性代数",
+      "date": "2026.06.08",
+      "pages": 30,
+      "description": "区分内蕴的正交变换与坐标表示中的正交矩阵，并用 Gram 矩阵、谱定理和几何图像统一相关问题。",
+      "topics": [
+        "正交变换",
+        "Gram 矩阵",
+        "谱定理",
+        "正规矩阵"
+      ],
+      "pdf": "./mirror-assets/orthogonal-transform-main.pdf",
+      "cover": "./mirror-assets/orthogonal-transform-cover.png"
+    },
+    {
+      "slug": "parallel-body-volume",
+      "title": "三维平行体体积展开、Brunn–Minkowski 凹性与等周不等式",
+      "subtitle": "凸几何与曲面微分几何速查笔记；中英双语版本",
+      "category": "凸几何 · 微分几何",
+      "date": "2026.06.01",
+      "pages": 9,
+      "pageLabel": "中文 9 页 · English 8 pages",
+      "description": "围绕三维 Steiner 型体积展开，串联平行曲面、Gauss map、shape operator、主曲率、Gauss–Bonnet 与 Brunn–Minkowski。",
+      "topics": [
+        "平行体",
+        "Steiner 公式",
+        "Brunn–Minkowski",
+        "主曲率"
+      ],
+      "pdf": "./mirror-assets/parallel-body-volume-main.pdf",
+      "alternatePdf": "./mirror-assets/parallel-body-volume-alternate.pdf",
+      "alternateLabel": "English PDF",
+      "cover": "./mirror-assets/parallel-body-volume-cover.png"
+    },
+    {
+      "slug": "pr-dy-adi",
+      "title": "二维抛物型方程的 PR 与 D’Yakonov 交替方向格式",
+      "subtitle": "从 2×2 内点算例到 Kronecker 积写法",
+      "category": "数值 PDE",
+      "date": "2026",
+      "pages": 7,
+      "description": "从二维 Crank–Nicolson 格式解释 ADI 因式分解，比较 PR 与 D’Yakonov 两条路径，并推广到 Kronecker 积矩阵形式。",
+      "topics": [
+        "ADI",
+        "Peaceman–Rachford",
+        "D’Yakonov",
+        "Kronecker 积"
+      ],
+      "pdf": "./mirror-assets/pr-dy-adi-main.pdf",
+      "cover": "./mirror-assets/pr-dy-adi-cover.png"
+    },
+    {
+      "slug": "probability-integral-transform",
+      "title": "概率积分变换：证明思路与严格依据",
+      "subtitle": "分位点、连续分布函数与常见坑点",
+      "category": "概率论",
+      "date": "2026",
+      "pages": 7,
+      "description": "通过分位点把事件 {F(X)<p} 拉回 X 轴，严格证明连续分布函数下 F(X) 服从 U(0,1)，并区分右连续性与连续性的作用。",
+      "topics": [
+        "概率积分变换",
+        "分位点",
+        "分布函数",
+        "Uniform 分布"
+      ],
+      "pdf": "./mirror-assets/probability-integral-transform-main.pdf",
+      "cover": "./mirror-assets/probability-integral-transform-cover.png"
+    },
+    {
+      "slug": "problem-7-11-linear-algebra",
+      "title": "问题 7.11 的线性代数版本解答",
+      "subtitle": "companion matrix、域扩张与商环观点",
+      "category": "线性代数 · 域论",
+      "date": "2026",
+      "pages": 7,
+      "description": "用多项式除法与最小多项式构造 Q(α) 的基，并计算乘法算子的 companion matrix 与行列式。",
+      "topics": [
+        "域扩张",
+        "最小多项式",
+        "companion matrix",
+        "商环"
+      ],
+      "pdf": "./mirror-assets/problem-7-11-linear-algebra-main.pdf",
+      "cover": "./mirror-assets/problem-7-11-linear-algebra-cover.png"
+    },
+    {
+      "slug": "quotient-topology",
+      "title": "BS Theorem 2.8.3 与 LeeSM A.30、4.30 的关系",
+      "subtitle": "商拓扑、因子化与光滑下降",
+      "category": "拓扑 · 微分流形",
+      "date": "2026.05.19",
+      "pages": 5,
+      "description": "分清构造商、识别商与映射下降三个动作，并精确对应 quotient map、开映射和光滑因子化定理。",
+      "topics": [
+        "商拓扑",
+        "quotient map",
+        "因子化",
+        "光滑下降"
+      ],
+      "pdf": "./mirror-assets/quotient-topology-main.pdf",
+      "cover": "./mirror-assets/quotient-topology-cover.png"
+    },
+    {
+      "slug": "real-analysis-intro",
+      "title": "实分析入门建议",
+      "subtitle": "从本科实变函数到 Folland / Barry Simon 的现代分析视角",
+      "category": "实分析",
+      "date": "2026.05.08",
+      "pages": 27,
+      "description": "整理测度、Lebesgue 积分、收敛定理与微分理论的学习主线，区分考试入门和长期分析训练，并给出执行方案。",
+      "topics": [
+        "测度论",
+        "Lebesgue 积分",
+        "收敛定理",
+        "学习路径"
+      ],
+      "pdf": "./mirror-assets/real-analysis-intro-main.pdf",
+      "cover": "./mirror-assets/real-analysis-intro-cover.png"
+    },
+    {
+      "slug": "series-equivalent-replacement",
+      "title": "一般项级数的敛散性判别与等价替换",
+      "subtitle": "绝对收敛、根值/比值判别与条件收敛中的误差累积",
+      "category": "数学分析",
+      "date": "2026.04.26",
+      "pages": 4,
+      "description": "区分作商得到的相对主阶与作差得到的绝对误差，说明等价替换为何在正项级数中安全、在条件收敛中可能失效。",
+      "topics": [
+        "级数",
+        "绝对收敛",
+        "等价无穷小",
+        "误差累积"
+      ],
+      "pdf": "./mirror-assets/series-equivalent-replacement-main.pdf",
+      "cover": "./mirror-assets/series-equivalent-replacement-cover.png"
+    },
+    {
+      "slug": "sobolev-norm-motivation",
+      "title": "Sobolev 范数为何如此定义？",
+      "subtitle": "从闭算子图、弱解、能量、频率、紧致性与数值逼近的统一视角",
+      "category": "泛函分析 · PDE · Sobolev 空间",
+      "date": "2026.07.11",
+      "pages": 17,
+      "description": "从弱导数、图范数和算子闭性出发，系统说明 Sobolev 范数为什么是自然选择；并串联能量方法、Fourier 高频控制、迹定理、紧嵌入、有限元与 Bochner 空间。",
+      "topics": [
+        "弱导数",
+        "图范数",
+        "H¹",
+        "PDE",
+        "紧嵌入"
+      ],
+      "pdf": "./mirror-assets/sobolev-norm-motivation-main.pdf",
+      "cover": "./mirror-assets/sobolev-norm-motivation-cover.png"
+    },
+    {
+      "slug": "three-worst-case-comparisons",
+      "title": "Lebesgue 常数、等振荡定理与 Fourier 模态分析",
+      "subtitle": "一个统一的“最坏情形”视角",
+      "category": "数值分析",
+      "date": "2026",
+      "pages": 6,
+      "description": "比较插值算子的最坏误差放大、minimax 一致逼近以及差分格式对最危险频率的放大，说明三者精神相通但技术不同。",
+      "topics": [
+        "Lebesgue 常数",
+        "等振荡定理",
+        "Fourier 模态",
+        "Von Neumann 稳定性"
+      ],
+      "pdf": "./mirror-assets/three-worst-case-comparisons-main.pdf",
+      "cover": "./mirror-assets/three-worst-case-comparisons-cover.png"
+    },
+    {
+      "slug": "uniform-sampling-sphere-fibonacci",
+      "title": "球面均匀采样与 Fibonacci 准均匀点集",
+      "subtitle": "从随机均匀分布到有限点集的几何均匀性；中英双语版本",
+      "category": "数值分析 · 计算几何 · 概率",
+      "date": "2026.07.14",
+      "pages": 25,
+      "pageLabel": "中文 25 页 · English 25 pages",
+      "description": "区分随机点在统计意义下的均匀性与 Fibonacci 点在有限几何布局上的准均匀性，并解释球面采样、分离半径、覆盖半径及其在数值积分中的作用。",
+      "topics": [
+        "球面采样",
+        "Fibonacci 点",
+        "quasi-uniform",
+        "Monte Carlo",
+        "球面数值积分"
+      ],
+      "pdf": "./mirror-assets/uniform-sampling-sphere-fibonacci-main.pdf",
+      "alternatePdf": "./mirror-assets/uniform-sampling-sphere-fibonacci-alternate.pdf",
+      "alternateLabel": "English PDF",
+      "cover": "./mirror-assets/uniform-sampling-sphere-fibonacci-cover.png"
+    }
+  ]
+}

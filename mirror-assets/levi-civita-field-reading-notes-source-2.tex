@@ -1,0 +1,492 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Noto Sans SC}[
+  Path=fonts/package/,
+  UprightFont=400Regular/NotoSansSC_400Regular.ttf,
+  BoldFont=700Bold/NotoSansSC_700Bold.ttf
+]
+\usepackage[margin=2.35cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{enumitem,booktabs,array,longtable,tabularx}
+\usepackage{xcolor,hyperref,cleveref,fancyhdr,titlesec}
+\definecolor{deepblue}{HTML}{16324F}
+\definecolor{softblue}{HTML}{EAF2F8}
+\definecolor{warm}{HTML}{8A4B08}
+\hypersetup{colorlinks=true,linkcolor=deepblue,citecolor=warm,urlcolor=deepblue,
+  pdftitle={Analysis on the Levi--Civita Field: Reading Notes},
+  pdfauthor={Personal reading notes}}
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.35em}
+\setlength{\emergencystretch}{3em}
+\setlist{nosep,leftmargin=2.2em}
+\sloppy
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\fancyhead[L]{Analysis on the Levi--Civita Field}
+\fancyhead[R]{Personal Reading Notes}
+\fancyfoot[C]{\thepage}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+
+\newcommand{\LC}{\mathcal R}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\st}{\operatorname{st}}
+
+\title{\bfseries\color{deepblue} Analysis on the Levi--Civita Field\par
+\large From Genuine Infinitesimals and Generalized Series to Computable Differentiation\par
+\vspace{0.4em}\normalsize A Guided Reading of Khodr M. Shamseddine's Dissertation\par
+\textit{New Elements of Analysis on the Levi-Civita Field}}
+\author{Personal Reading Notes}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fcolorbox{deepblue}{softblue}{\parbox{0.88\textwidth}{
+\textbf{Authorship and provenance.} These are personal study notes based on a publicly
+available dissertation and earlier learning discussions. They are not the note writer's
+research and do not imply participation in the original work. The dissertation was first
+recommended by a friend's advisor to that friend; the note writer pursued it independently
+out of personal interest. The original work is Khodr M. Shamseddine's 1999 Michigan State
+University doctoral dissertation, supervised by Martin Berz. The author's copy is available
+at \href{https://www.physics.umanitoba.ca/~khodr/dissert.pdf}{dissert.pdf}.
+}}
+\end{center}
+
+\begin{abstract}
+These notes organize the central questions raised by Shamseddine's dissertation into one
+coherent route. Why leave the Archimedean real field? What is gained by admitting genuine
+infinitesimals? How is the Levi--Civita field constructed, and why is left-finite support the
+right compromise between Hahn-series generality and effective computation? What do leading
+exponents, valuations, skeleton groups, field automorphisms, real closure, differential
+algebra, order topology, and weak topology contribute? The later sections explain why naive
+topological continuity and differentiability are too weak, why uniform Lipschitz-type control
+and expandable functions are introduced, and how computer functions and infinitesimal
+differentiation connect the abstract theory to high-order numerical work. Common
+misconceptions about point particles, Dirac delta, finite support, and weak convergence are
+addressed explicitly.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{The global problem}
+
+The dissertation does not merely replace one derivative formula by another. It builds an
+environment in which infinitesimals are numbers, generalized series remain computable, and a
+useful part of classical analysis can be reconstructed. Its logical architecture is
+\[
+\begin{gathered}
+\boxed{\text{genuine infinitesimals}}
+\Longrightarrow
+\boxed{\text{a computable non-Archimedean field}}\\[0.4em]
+\Downarrow\\[-0.1em]
+\boxed{\text{calculus and applications}}
+\Longleftarrow
+\boxed{\text{appropriate topologies and function classes}}.
+\end{gathered}
+\]
+The point is not that real analysis is defective. Real analysis is rigorous and extraordinarily
+successful. The new theory answers a different design question: can infinitesimal reasoning be
+made literal while retaining algebraic control, convergence mechanisms, and implementation?
+
+The chapters play distinct roles. Chapter 1 supplies mathematical, physical, and computational
+motivation. Chapter 2 studies the algebraic skeleton of non-Archimedean extensions. Chapter 3
+constructs the Levi--Civita field and its order, topology, and differential algebra. Chapter 4
+develops sequences and power series. Chapter 5 shows why naive calculus is pathological.
+Chapter 6 isolates expandable functions, a class on which familiar theorems return. Chapter 7
+connects the theory with computer functions and higher-order differentiation.
+
+\section{Why leave the real field? Three motivations}
+
+\subsection{The mathematical motivation}
+
+\begin{definition}[Archimedean ordered field]
+An ordered field $F$ is Archimedean if for every $x\in F$ there exists $n\in\mathbb N$ with
+$n>x$. Equivalently, no positive $\varepsilon\in F$ satisfies
+\[
+0<\varepsilon<\frac1n\qquad\text{for every }n\in\mathbb N.
+\]
+\end{definition}
+
+The real field is Archimedean. Consequently a nonzero number smaller than every positive real
+scale cannot belong to $\R$. Classical analysis handles this by limits:
+\[
+f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}.
+\]
+The dissertation asks whether one can work in a larger ordered field containing a nonzero $d$
+with $|d|<1/n$ for every $n$, and then manipulate the difference quotient directly. This is an
+extension of the number system, not a criticism of the limit definition.
+
+\subsection{The computational motivation}
+
+Ordinary finite differences face two competing errors. If the real step $h$ is too large, Taylor
+truncation dominates; if it is too small, subtracting nearly equal floating-point values causes
+catastrophic cancellation. With a formal genuine infinitesimal $d$, different error orders are
+stored in different powers of $d$. For example,
+\[
+f(x)=x^2-2x
+\quad\Longrightarrow\quad
+\frac{f(x+d)-f(x)}d=2x-2+d.
+\]
+The quotient is not literally the derivative: it is the derivative plus an infinitesimal
+remainder. Reading its constant coefficient gives $2x-2$. This coefficient-extraction viewpoint
+is the bridge from infinitesimal algebra to automatic or numerical differentiation.
+
+\subsection{The physical motivation}
+
+Point charges, point masses, and impulses are represented in classical analysis by distributions.
+The Dirac delta is defined by its action on a test function,
+\[
+\langle\delta_0,\varphi\rangle=\varphi(0),
+\]
+not as an ordinary real-valued function. A non-Archimedean framework can instead use an actual
+function with infinitesimal width and infinite height whose integral action reproduces the desired
+point-source behavior.
+
+This does not mean that an electron or a smallest physical unit is a mathematical infinitesimal.
+An elementary charge is a finite physical constant; a point particle is a geometric idealization;
+a Levi--Civita infinitesimal is a nonzero element of an ordered field. These are three different
+logical categories. The connection is modeling: infinitesimal-width profiles may represent
+concentrated sources while remaining genuine functions in the enlarged codomain.
+
+\section{From design requirements to the field}
+
+Before writing a formula, list the desired properties:
+\begin{enumerate}
+\item $\R$ should embed as an ordered subfield.
+\item Positive infinitesimals $d$ and rational powers $d^q$ should exist.
+\item Every nonzero element should have a readable dominant term.
+\item Addition and multiplication should be computable coefficient by coefficient.
+\item Each output coefficient should depend on only finitely many input coefficients.
+\item The resulting structure should be a field and, ideally, real closed and suitably complete.
+\end{enumerate}
+
+These requirements suggest generalized series
+\[
+x=\sum_{q\in\Q}x[q]d^q,
+\]
+where $x[q]\in\R$. The crucial issue is not writing the symbol but controlling the support
+\[
+\supp(x)=\{q\in\Q:x[q]\ne0\}.
+\]
+
+\begin{definition}[Left-finite support]
+A set $S\subseteq\Q$ is left-finite if, for every $r\in\Q$, the set
+\[
+S\cap(-\infty,r]
+\]
+is finite.
+\end{definition}
+
+Left-finite does \emph{not} mean finite. The support $\{0,1,2,\ldots\}$ is infinite but
+left-finite. In contrast, $\{1,1/2,1/3,\ldots\}$ is not left-finite because infinitely many
+terms lie to the left of $1$. The adjective ``left'' refers to the order direction on the
+exponent line, not an arbitrary naming convention.
+
+\begin{definition}[Levi--Civita field]
+The real Levi--Civita field is
+\[
+\LC=\{x:\Q\to\R\mid\supp(x)\text{ is left-finite}\}.
+\]
+It is convenient to read $x$ as the generalized series $\sum_q x[q]d^q$.
+\end{definition}
+
+Addition is coefficientwise. Multiplication is convolution:
+\[
+(xy)[q]=\sum_{q_1+q_2=q}x[q_1]y[q_2].
+\]
+The left-finite condition ensures that, for fixed $q$, only finitely many pairs contribute.
+Thus each coefficient is an ordinary finite real sum. This is the computational reason for the
+support restriction.
+
+Hahn fields permit much more general well-ordered supports. Every left-finite subset of $\Q$ is
+well ordered, but not every well-ordered subset is left-finite. Hence the Levi--Civita field is a
+special Hahn-type generalized-series field. It sacrifices some generality to obtain sequential,
+coefficientwise computability.
+
+\section{Leading exponents, order, and valuation}
+
+For nonzero $x\in\LC$, define
+\[
+\lambda(x)=\min\supp(x).
+\]
+This leading exponent gives the dominant scale. If
+\[
+x=7d^{3/2}-2d^2+5d^{11/4},
+\]
+then $3/2$ has not appeared mysteriously: it is simply the smallest exponent with nonzero
+coefficient, so $\lambda(x)=3/2$. The element is of order $d^{3/2}$, and
+\[
+d^{-3/2}x=7-2d^{1/2}+5d^{5/4}
+\]
+has finite nonzero leading part $7$.
+
+The field order is lexicographic by the leading coefficient: $x>0$ if and only if
+$x[\lambda(x)]>0$. This works because all higher-exponent terms are smaller scales and cannot
+reverse the sign of the first nonzero term.
+
+The map $v(x)=\lambda(x)$ behaves like a valuation:
+\[
+v(xy)=v(x)+v(y),\qquad
+v(x+y)\ge\min\{v(x),v(y)\}.
+\]
+It is best understood as order-of-magnitude bookkeeping. Large valuation means small magnitude.
+For instance, $v(d^5)>v(d^2)$ but $0<d^5<d^2$.
+
+Two positive elements are Archimedean equivalent when each is bounded by a natural-number
+multiple of the other. The equivalence classes form a group of magnitude levels. A
+\emph{skeleton group} is a structural record of these levels together with the coefficient data
+attached to them. It separates ``which scale?'' from ``which leading coefficient?'' and helps
+classify automorphisms and extensions.
+
+\section{Algebraic background with minimal prerequisites}
+
+A field is a commutative number system in which every nonzero element has a multiplicative
+inverse. A field automorphism is a bijection $\sigma:F\to F$ preserving addition, multiplication,
+$0$, and $1$. Every field automorphism fixes $\Q$, because it fixes $1$ and therefore all integer
+and rational combinations of $1$.
+
+``Nontrivial automorphism'' means an automorphism other than the identity. The phrase does not
+mean that the field itself is nontrivial. When an order must also be preserved, the freedom is
+smaller: positive elements must stay positive and the hierarchy of scales must remain compatible.
+In a non-Archimedean field, understanding possible changes of infinitesimal generators requires
+understanding the value group and its skeleton.
+
+An algebraically closed field is one in which every nonconstant polynomial has a root. The real
+numbers are not algebraically closed because $X^2+1$ has no real root; the complex numbers are.
+For ordered fields the more natural endpoint is \emph{real closed}: every positive element has a
+square root and every odd-degree polynomial has a root; adjoining $i$ then gives an algebraically
+closed field. Real closure matters because it ensures that algebraic operations do not continually
+force us outside the chosen real domain.
+
+A differential field is a field equipped with a derivation $D$ satisfying
+\[
+D(x+y)=D(x)+D(y),\qquad D(xy)=xD(y)+yD(x).
+\]
+For generalized series one can formally set $D(d^q)=q d^{q-1}$ and extend termwise under the
+support rules. This is a differential-algebra structure on the numbers themselves. It is distinct
+from differentiating a function $f:\LC\to\LC$, although the two ideas later interact.
+
+\section{Order topology and weak topology}
+
+The order topology is generated by open intervals $(a,b)$. Because the field contains genuine
+infinitesimals, it is much finer near real points than the usual topology of $\R$. In particular,
+the embedded copy of $\R$ is discrete: for a positive infinitesimal $d$,
+\[
+(r-d,r+d)\cap\R=\{r\}.
+\]
+This explains why connectedness-based real-analysis arguments cannot be transferred blindly.
+An interval in a non-Archimedean ordered field may be disconnected in ways impossible over $\R$,
+and local compactness may fail because infinitesimal scales create too many nested directions.
+
+Order-Cauchy completeness means that every sequence Cauchy with respect to the ordered-field
+absolute value converges in the field. It is useful, but it is not the same as Dedekind
+completeness. The latter would force an Archimedean ordered field under familiar hypotheses, so
+one must specify the completeness notion rather than say simply ``complete.''
+
+The weak topology observes finitely many coefficients at a time. One useful family of seminorms
+is
+\[
+p_r(x)=\max\{|x[q]|:q\le r\},
+\]
+with the convention that the maximum over an empty set is zero. Left-finiteness makes the set of
+relevant nonzero coefficients finite, so the maximum exists. The seminorm axioms follow directly:
+\[
+p_r(\alpha x)=|\alpha|p_r(x),\qquad
+p_r(x+y)\le p_r(x)+p_r(y),\qquad p_r(x)\ge0.
+\]
+It may vanish on a nonzero element: if all exponents of $x$ exceed $r$, then $p_r(x)=0$. This is
+exactly why it is a seminorm, not a norm.
+
+Weak convergence $x_n\to x$ means convergence with respect to all these seminorms, equivalently
+coefficientwise convergence on every bounded-left exponent window. Strong or order convergence
+controls the whole ordered magnitude. The philosophical resemblance to weak topologies in
+functional analysis is real: both retain selected observables while permitting convergence that
+a stronger topology would reject. The concrete observables, however, are different.
+
+\section{Why ordinary continuity and differentiability become pathological}
+
+Classical conclusions often contain hidden topological hypotheses. On a connected real interval,
+a differentiable function with zero derivative is constant. More generally, on a connected open
+subset of $\R^n$, a $C^1$ function with zero differential is constant. In complex analysis, a
+holomorphic function with zero complex derivative is constant on each connected component. The
+proof always uses a mechanism linking nearby points---usually the mean value theorem, paths, or
+analytic continuation.
+
+Over a highly disconnected non-Archimedean domain, a locally constant function may vary from one
+clopen component to another while having derivative zero everywhere. Thus the formal statement
+``$f'=0$ implies $f$ is constant'' fails unless the domain and function class restore enough
+coherence. Likewise, compactness-based results such as uniform continuity on closed bounded
+intervals, attainment of extrema, and subsequence extraction may fail when the corresponding
+topological compactness is absent.
+
+Topological continuity alone only says that each point has some sufficiently small neighborhood.
+The permitted scale can vary wildly from point to point. A uniform Lipschitz condition
+\[
+|f(x)-f(y)|\le L|x-y|
+\]
+uses one constant $L$ across the relevant set and couples behavior at different points. It is not
+an arbitrary strengthening: it supplies exactly the uniform control needed for estimates,
+integration, limit interchange, and mean-value-type arguments.
+
+This design pattern occurs throughout analysis. In PDE one rarely works with all functions:
+$C^k$ spaces control classical derivatives, $C^\infty$ supports repeated differentiation,
+analytic functions are controlled by convergent power series, Sobolev spaces control weak
+derivatives in $L^p$, and H\"older or Lipschitz spaces control oscillation. A ``good function
+class'' is chosen to be strong enough for theorems and stable under the operations the problem
+requires.
+
+\section{Derivate and expandable functions}
+
+The dissertation introduces stronger differentiability notions because pointwise difference
+quotients do not sufficiently coordinate behavior across infinitesimal scales. A derivate-type
+condition controls a two-point remainder uniformly. Schematically, for an intended derivative
+$g$ one requires
+\[
+f(y)-f(x)-g(x)(y-x)
+\]
+to be small relative to $y-x$ in a way uniform over an appropriate neighborhood or scale range.
+The exact regularity conditions specify where the generalized series converge and ensure that
+termwise algebra, differentiation, and substitution are legitimate.
+
+An expandable function is locally represented by a convergent generalized Taylor expansion with
+controlled coefficients and remainder. The important point is not the label but the closure
+package: the class is designed to be stable under algebraic operations and differentiation while
+supporting Rolle, Lagrange mean value, extremum, and Taylor-type theorems in corrected form.
+
+``Transcendental function'' is not exclusively a complex-analysis term. It generally means a
+function not algebraic over the basic rational-function structure; exponential, logarithmic, and
+trigonometric functions are standard examples. Complex analysis studies them powerfully, but they
+also exist on real and non-Archimedean domains. On $\LC$, power-series definitions require careful
+convergence domains, which is why topology and regularity enter before the function theory.
+
+\section{Distributions and genuine functions}
+
+Saying that a generalized delta becomes a function does not erase distribution theory. It means
+the enlarged codomain contains infinite values and infinitesimal widths, so a sharply concentrated
+profile can be an honest $\LC$-valued function. To compare it with the classical delta, one still
+tests its integral action on suitable test functions and then takes a real part or standard part.
+The relationship is therefore representational:
+\[
+\text{non-Archimedean function}
+\xrightarrow{\text{pairing and real-part extraction}}
+\text{classical distributional action}.
+\]
+The benefit is that nonlinear or pointwise algebra may be performed before projecting back to the
+classical distributional level. The cost is dependence on the enlarged field, its integration
+theory, and the chosen projection.
+
+\section{Computer functions and higher derivatives}
+
+A floating-point number is a finite machine representation, usually of the form
+\[
+\pm m\,b^e,
+\]
+with bounded precision for the significand $m$ and bounded exponent $e$. Most real numbers cannot
+be represented exactly, and arithmetic is rounded. This explains cancellation in finite
+differences and why taking a smaller ordinary step does not indefinitely improve accuracy.
+
+An extension algebra enriches each scalar by formal components that propagate derivative
+information. Dual numbers $a+b\varepsilon$ with $\varepsilon^2=0$ are the simplest example:
+\[
+f(x+\varepsilon)=f(x)+f'(x)\varepsilon.
+\]
+Truncated Taylor algebras keep higher powers and therefore higher derivatives. Levi--Civita
+arithmetic is related but not identical: its infinitesimal is nonzero and not generally nilpotent,
+and its generalized series can encode a hierarchy of orders.
+
+For a genuine infinitesimal $d$, a forward difference of order $n$ is
+\[
+\Delta_d^n f(x_0)=
+d^{-n}\sum_{j=0}^{n}(-1)^{n-j}\binom nj f(x_0+jd).
+\]
+In floating-point arithmetic this expression is vulnerable to rounding and cancellation. In a
+formal infinitesimal algebra, error orders occupy different powers of $d$ and can be read
+coefficient by coefficient. Higher derivatives matter in accelerator and beam physics because
+high-order transfer maps describe nonlinear aberrations, stability, and sensitivity. Chapter 7
+therefore realizes the earlier algebraic and analytic theory as a computational method; it is not
+an unrelated appendix.
+
+\section{What survives from classical analysis?}
+
+When moving to a new scalar field, the reusable procedure is:
+\begin{enumerate}
+\item identify the algebraic statement and its field assumptions;
+\item identify the topology used in convergence or continuity;
+\item locate hidden uses of connectedness, compactness, or completeness;
+\item test whether the function class is closed under the required operations;
+\item strengthen hypotheses only where a proof mechanism actually fails.
+\end{enumerate}
+
+Algebraic identities and finite polynomial manipulations usually transfer readily. Results based
+on connected intervals, Heine--Borel compactness, or Dedekind completeness require special care.
+Power-series arguments may transfer under weak convergence but not under order convergence, or
+vice versa. Mean-value and extremum theorems return only after the domain and function class supply
+the missing global control.
+
+\section{Common misconceptions, corrected}
+
+\begin{description}[style=nextline,leftmargin=2.3em]
+\item[``Real analysis is being abandoned.'']
+No. Its limit theory remains valid. The dissertation enlarges the scalar field for a different
+kind of representation and then audits which theorems transfer.
+\item[``Left-finite means finite support.'']
+No. It means finitely many support points below each fixed exponent bound.
+\item[``The leading exponent $3/2$ is derived from a universal formula.'']
+No. In the displayed example it is simply the smallest exponent whose coefficient is nonzero.
+\item[``Weak convergence is vague convergence.'']
+No. It is precise convergence in the topology generated by a specified family of seminorms.
+\item[``A point particle proves physical infinitesimals exist.'']
+No. Point support, quantized values, and non-Archimedean numbers are different concepts.
+\item[``A delta represented by a function makes distributions obsolete.'']
+No. The non-Archimedean model supplies an alternative representative whose classical action must
+still be related to distribution theory.
+\item[``Topological differentiability automatically gives the mean value theorem.'']
+No. The classical proof also depends on order, connectedness, compactness, and a sufficiently
+coherent function class.
+\end{description}
+
+\section{A practical second-reading plan}
+
+Read Chapter 1 for the separation of mathematical, physical, and computational motives. In
+Chapter 2, first master Archimedean equivalence classes and value groups; treat automorphisms as a
+structural classification problem rather than a list of formulas. Chapter 3 is the foundation:
+be able to state left-finiteness, convolution multiplication, leading order, the field order, and
+the weak seminorms from memory. In Chapter 4, record explicitly which topology is used in every
+convergence theorem. In Chapter 5, ask which familiar real-analysis proof fails and at exactly
+which hypothesis. Read Chapter 6 as the repair: expandable functions are engineered to restore a
+stable calculus. Finally, read Chapter 7 as the computational payoff of the preceding structure.
+
+The shortest conceptual summary is:
+\[
+\begin{gathered}
+\text{abandon Archimedeanness, not rigor;}\\
+\text{restrict support, not all infinite series;}\\
+\text{choose topology and regularity to match the theorem;}\\
+\text{extract finite information from infinitesimal expansions.}
+\end{gathered}
+\]
+
+\section*{Primary source}
+\addcontentsline{toc}{section}{Primary source}
+Khodr M. Shamseddine, \textit{New Elements of Analysis on the Levi-Civita Field},
+Ph.D. dissertation, Michigan State University, 1999. Author-hosted copy:
+\url{https://www.physics.umanitoba.ca/~khodr/dissert.pdf}.
+
+\end{document}
