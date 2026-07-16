@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#153b34">
+  <title>数学学习档案室</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23153b34%22/><text x=%2232%22 y=%2247%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22%23d27748%22>∫</text></svg>">
+  <style>
+    :root{--green:#153b34;--cream:#f4f0e8;--paper:#fff;--orange:#d27748;--ink:#173a34;--muted:#66746f;--line:#d8d1c5}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,var(--green) 0 27%,var(--cream) 27% 100%);color:var(--ink);font-family:ui-serif,"Noto Serif SC","Songti SC",serif;min-height:100vh}
+    main{width:min(760px,calc(100% - 32px));margin:48px auto;background:var(--paper);border-top:4px solid var(--orange);padding:56px 64px 64px;box-shadow:0 22px 70px #09231c22}
+    header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}.brand{display:flex;gap:18px;align-items:center}.mark{font-size:64px;line-height:.8;color:var(--orange)}
+    .brand strong{display:block;font-size:22px;letter-spacing:.08em}.brand small{display:block;margin-top:6px;font:600 10px/1.2 ui-sans-serif,sans-serif;letter-spacing:.18em;color:var(--muted)}
+    .lang{border:1px solid var(--line);border-radius:99px;padding:5px;font:14px ui-sans-serif,sans-serif}.lang button{border:0;background:none;padding:7px 12px;border-radius:99px;color:var(--muted);cursor:pointer}.lang button.active{background:var(--green);color:white}
+    .eyebrow{margin-top:76px;color:var(--orange);font:14px ui-sans-serif,sans-serif}h1{font-size:52px;font-weight:500;margin:20px 0 14px}.lead{font-size:18px;line-height:1.8;color:#526761;margin:0 0 42px}
+    .card{border:1px solid var(--line);padding:24px 26px;margin:14px 0}.card h2{font-size:20px;margin:0 0 9px}.card p{margin:0;color:var(--muted);line-height:1.7}.badge{display:inline-block;margin-bottom:12px;padding:4px 9px;background:#f6e4d9;color:#a5522b;font:12px ui-sans-serif,sans-serif}
+    .button{display:inline-block;margin-top:18px;padding:12px 18px;background:var(--green);color:white;text-decoration:none;font:15px ui-sans-serif,sans-serif}.note{margin-top:30px;font:13px/1.7 ui-sans-serif,sans-serif;color:var(--muted)}
+    footer{margin-top:48px;border-top:1px solid var(--line);padding-top:20px;font:12px ui-sans-serif,sans-serif;color:var(--muted)}
+    @media(max-width:650px){main{margin:0;width:100%;min-height:100vh;padding:36px 24px}header{display:block}.lang{margin-top:28px;width:max-content}.eyebrow{margin-top:54px}h1{font-size:40px}}
+  </style>
+</head>
+<body><main>
+  <header><div class="brand"><span class="mark">∫</span><div><strong data-zh="数学学习档案室" data-en="Mathematics Study Archive">数学学习档案室</strong><small>MATHEMATICS STUDY ARCHIVE</small></div></div><nav class="lang" aria-label="Language"><button class="active" data-lang="zh">中文</button><button data-lang="en">English</button></nav></header>
+  <p class="eyebrow" data-zh="公开镜像" data-en="PUBLIC MIRROR">公开镜像</p>
+  <h1 data-zh="欢迎来到档案室" data-en="Welcome to the archive">欢迎来到档案室</h1>
+  <p class="lead" data-zh="这里保存可公开分享的数学学习记录、讲义与项目资料。此页面是原档案室的 GitHub 长期镜像。" data-en="A lasting GitHub mirror for publicly shareable mathematics notes, handouts, and project materials.">这里保存可公开分享的数学学习记录、讲义与项目资料。此页面是原档案室的 GitHub 长期镜像。</p>
+  <section class="card"><span class="badge" data-zh="建设中" data-en="IN PROGRESS">建设中</span><h2 data-zh="公开资料索引" data-en="Public materials index">公开资料索引</h2><p data-zh="资料正在从原档案室整理迁移。中英文对应版本会放在同一条目中，避免重复和混淆。" data-en="Materials are being organized from the original archive. Matching Chinese and English editions will be grouped together.">资料正在从原档案室整理迁移。中英文对应版本会放在同一条目中，避免重复和混淆。</p></section>
+  <section class="card"><h2 data-zh="原档案室" data-en="Original archive">原档案室</h2><p data-zh="原站继续保留登录、个人专属内容等动态功能。" data-en="The original site retains sign-in and private, account-specific content.">原站继续保留登录、个人专属内容等动态功能。</p><a class="button" href="https://academic-portfolio.william-hg1216.chatgpt.site/study" data-zh="访问原档案室" data-en="Open original archive">访问原档案室</a></section>
+  <p class="note" data-zh="隐私说明：GitHub Pages 是公开网站；私人账号、密码和个人资料不会复制到这里。" data-en="Privacy: GitHub Pages is public. Accounts, passwords, and private records are not copied here.">隐私说明：GitHub Pages 是公开网站；私人账号、密码和个人资料不会复制到这里。</p>
+  <footer>∫ Mathematics Study Archive · GitHub Mirror</footer>
+</main><script>
+  const buttons=[...document.querySelectorAll('[data-lang]')];
+  buttons.forEach(button=>button.addEventListener('click',()=>{const lang=button.dataset.lang;document.documentElement.lang=lang==='zh'?'zh-CN':'en';buttons.forEach(x=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-zh]').forEach(x=>x.textContent=x.dataset[lang]);}));
+</script></body></html>
