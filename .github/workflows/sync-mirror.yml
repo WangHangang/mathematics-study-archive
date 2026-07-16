@@ -5,12 +5,17 @@ on:
     - cron: '*/10 * * * *'
 permissions:
   contents: write
+  pages: write
+  id-token: write
 concurrency:
   group: mirror-sync
   cancel-in-progress: true
 jobs:
   sync:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,3 +29,12 @@ jobs:
           git add content.json mirror-assets
           git diff --cached --quiet || git commit -m "Sync public archive"
           git push
+      - name: Prepare Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
